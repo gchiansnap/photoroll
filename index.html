@@ -293,23 +293,45 @@
 
   // Edit the "title" fields below to caption each photo as you like.
   // Camera/lens/location are placeholders — update to match each shot.
-  const photos = [
-    { id: "20260117_EM50524_ihny15", title: "Joo Chiat, frame 1", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50297_wqhqj8", title: "Joo Chiat, frame 2", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50322_yvdbud", title: "Joo Chiat, frame 3", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50343_mxaldi", title: "Joo Chiat, frame 4", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50313_k1u3um", title: "Joo Chiat, frame 5", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50400_eplatr", title: "Joo Chiat, frame 6", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50604_ogsmc9", title: "Joo Chiat, frame 7", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50372_qomvur", title: "Joo Chiat, frame 8", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
-    { id: "20260117_EM50517_yokw6l", title: "Joo Chiat, frame 9", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" }
-  ].map(p => ({
-    title: p.title,
-    src: thumb(p.id),
-    download: full(p.id),
-    camera: p.camera,
-    lens: p.lens,
-    location: p.location
+  const publicIds = [
+    "20260117_EM50253_qrspor",
+    "20260117_EM50256_v46lnb",
+    "20260117_EM50262_p8zyck",
+    "20260117_EM50275_l6q6er",
+    "20260117_EM50297_wqhqj8",
+    "20260117_EM50313_k1u3um",
+    "20260117_EM50319_pekdid",
+    "20260117_EM50322_yvdbud",
+    "20260117_EM50332_czzhe6",
+    "20260117_EM50343_mxaldi",
+    "20260117_EM50347_zahqj7",
+    "20260117_EM50372_qomvur",
+    "20260117_EM50399_bcbmqs",
+    "20260117_EM50400_eplatr",
+    "20260117_EM50423_qck5rp",
+    "20260117_EM50425_fyrgur",
+    "20260117_EM50428_jnaunr",
+    "20260117_EM50484_qwpswq",
+    "20260117_EM50491_glri3z",
+    "20260117_EM50499_hzw7g4",
+    "20260117_EM50517_yokw6l",
+    "20260117_EM50519_ybyw2n",
+    "20260117_EM50524_ihny15",
+    "20260117_EM50532_vvpaay",
+    "20260117_EM50594_ylcc7z",
+    "20260117_EM50604_ogsmc9",
+    "20260117_EM50618_coy0et",
+    "20260117_EM50627_soqeny",
+    "20260117_EM50648_fxunv3",
+    "20260117_EM50660_gm4mld",
+    "20260117_EM50712_bf7uof"
+  ];
+
+  const photos = publicIds.map((id, i) => ({
+    title: `Joo Chiat, frame ${i + 1}`,
+    src: thumb(id),
+    download: full(id),
+    location: "Joo Chiat, SG"
   }));
 
   const gallery = document.getElementById('gallery');
@@ -324,8 +346,6 @@
       </div>
       <figcaption>
         <span class="cap-title">${p.title}</span>
-        <span>${p.camera}</span>
-        <span>${p.lens}</span>
         <span>${p.location}</span>
       </figcaption>
     `;
@@ -359,7 +379,7 @@
   function openLightbox(p){
     lbImg.src = p.download;
     lbImg.alt = p.title;
-    lbCap.textContent = `${p.title} — ${p.camera}, ${p.lens} — ${p.location}`;
+    lbCap.textContent = `${p.title} — ${p.location}`;
     lbDownload.href = p.download;
     lightbox.classList.add('open');
   }
