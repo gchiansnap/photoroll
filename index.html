@@ -6,19 +6,16 @@
 <title>Frames — a photo journal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #121210;
-    --bg-elevated: #1b1a17;
-    --text: #ece7dd;
-    --text-muted: #918c80;
-    --hairline: #2d2b26;
-    --accent: #b8462f; /* darkroom safelight red */
-    --accent-dim: rgba(184,70,47,0.35);
+    --bg: #000000;
+    --text: #f5f5f7;
+    --text-dim: #86868b;
+    --hairline: rgba(255,255,255,0.08);
   }
 
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   html { scroll-behavior: smooth; }
 
@@ -26,210 +23,218 @@
     margin:0;
     background: var(--bg);
     color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* --- sprocket strip, top & bottom --- */
-  .sprocket-strip{
-    height: 22px;
-    width: 100%;
-    background-image: radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px);
-    background-size: 28px 22px;
-    background-position: 14px center;
-    background-color: #060605;
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-  }
-
   header{
-    padding: 6vw 6vw 4vw;
-    background: #060605;
-    border-bottom: 1px solid var(--hairline);
+    padding: 12vw 6vw 5vw;
+    text-align: left;
   }
 
-  .eyebrow{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
+  header p.eyebrow{
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin: 0 0 1.1rem;
+    color: var(--text-dim);
+    margin: 0 0 1.4rem;
   }
 
   h1{
-    font-family: 'Fraunces', serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-size: clamp(2.4rem, 6vw, 4.6rem);
-    line-height: 1.02;
-    letter-spacing: -0.01em;
-    margin: 0 0 1.2rem;
-    max-width: 16ch;
+    font-weight: 200;
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.4rem;
+    max-width: 18ch;
   }
 
   header p.sub{
-    font-size: 1rem;
-    color: var(--text-muted);
-    max-width: 46ch;
+    font-weight: 300;
+    font-size: 1.05rem;
     line-height: 1.6;
+    color: var(--text-dim);
+    max-width: 44ch;
     margin: 0;
   }
 
   main{
-    padding: 5vw 6vw 8vw;
+    padding: 0 3vw 10vw;
   }
 
+  /* --- masonry via CSS columns --- */
   .gallery{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2.6rem 1.8rem;
+    column-count: 1;
+    column-gap: 6px;
+  }
+  @media (min-width: 560px){
+    .gallery{ column-count: 2; }
+  }
+  @media (min-width: 900px){
+    .gallery{ column-count: 3; }
+  }
+  @media (min-width: 1300px){
+    .gallery{ column-count: 4; }
   }
 
-  figure.frame{
-    margin: 0;
+  figure.tile{
+    margin: 0 0 6px;
+    break-inside: avoid;
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    cursor: pointer;
   }
 
-  figure.frame.visible{
+  figure.tile.visible{
     opacity: 1;
     transform: translateY(0);
   }
 
-  .frame-photo{
-    position: relative;
-    overflow: hidden;
-    background: var(--bg-elevated);
-    border: 1px solid var(--hairline);
-    cursor: zoom-in;
-  }
-
-  .frame-photo img{
+  figure.tile img{
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    filter: grayscale(0.08) contrast(1.02);
-    transition: transform 0.7s cubic-bezier(.2,.7,.2,1), filter 0.5s ease;
+    transition: transform 0.3s cubic-bezier(.2,.7,.2,1), filter 0.3s ease;
   }
 
-  .frame-photo:hover img{
-    transform: scale(1.035);
-    filter: grayscale(0) contrast(1.05);
-  }
-
-  .frame-number{
-    position: absolute;
-    top: 0.7rem;
-    left: 0.7rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.05em;
-    color: #d9d4c8;
-    background: rgba(6,6,5,0.55);
-    padding: 0.2rem 0.5rem;
-    border: 1px solid rgba(236,231,221,0.2);
-  }
-
-  figcaption{
-    margin-top: 0.65rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.74rem;
-    line-height: 1.55;
-    color: var(--text-muted);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 0.9rem;
-  }
-
-  figcaption .cap-title{
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.92rem;
-    color: var(--text);
-    width: 100%;
-    margin-bottom: 0.15rem;
-  }
-
-  figcaption span::before{
-    content: "· ";
-    color: var(--accent);
-  }
-  figcaption span:first-of-type::before{
-    content: "";
+  figure.tile:hover img{
+    transform: scale(1.015);
+    filter: brightness(1.04);
   }
 
   /* --- lightbox --- */
   .lightbox{
     position: fixed;
     inset: 0;
-    background: rgba(6,6,5,0.94);
+    background: rgba(0,0,0,0.98);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4vw;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.22s ease;
     z-index: 100;
   }
   .lightbox.open{ opacity: 1; pointer-events: auto; }
 
-  .lightbox img{
-    max-width: 100%;
-    max-height: 78vh;
-    border: 1px solid var(--hairline);
-  }
-
-  .lightbox-panel{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    max-width: 90vw;
-  }
-
-  .lightbox-caption{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    text-align: center;
-  }
-
-  .lightbox-actions{
-    display: flex;
-    gap: 0.9rem;
-  }
-
-  .lightbox-actions a, .lightbox-actions button{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .lightbox-close{
+    position: absolute;
+    top: 2rem;
+    right: 2.5vw;
+    background: none;
+    border: none;
     color: var(--text);
-    background: transparent;
-    border: 1px solid var(--hairline);
-    padding: 0.55rem 1.1rem;
+    font-size: 1.6rem;
+    font-weight: 200;
     cursor: pointer;
-    text-decoration: none;
-    transition: border-color 0.2s ease, color 0.2s ease;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+    padding: 0.5rem;
+  }
+  .lightbox-close:hover{ opacity: 1; }
+
+  .lightbox-stage{
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4vh 4vw 2vh;
+    min-height: 0;
   }
 
-  .lightbox-actions a:hover, .lightbox-actions button:hover{
-    border-color: var(--accent);
-    color: var(--accent);
+  .lightbox-stage img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0.985);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .lightbox-stage img.shown{
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .lightbox-info{
+    text-align: center;
+    padding: 0 6vw 1.6rem;
+  }
+
+  .lightbox-title{
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin: 0 0 0.3rem;
+  }
+
+  .lightbox-meta{
+    font-weight: 300;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin: 0 0 0.3rem;
+  }
+
+  .lightbox-exif{
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--text-dim);
+    opacity: 0.75;
+    margin: 0 0 0.9rem;
+  }
+
+  .lightbox-download{
+    font-weight: 400;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .lightbox-download:hover{
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
+  /* --- lightstrip --- */
+  .lightstrip{
+    width: 100%;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 0 3vw 2.2rem;
+    scrollbar-width: none;
+  }
+  .lightstrip::-webkit-scrollbar{ display: none; }
+
+  .lightstrip img{
+    height: 56px;
+    width: 56px;
+    object-fit: cover;
+    flex: 0 0 auto;
+    opacity: 0.35;
+    cursor: pointer;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .lightstrip img:hover{ opacity: 0.7; }
+  .lightstrip img.active{
+    opacity: 1;
+    transform: scale(1.06);
   }
 
   footer{
-    padding: 3vw 6vw 4vw;
-    color: var(--text-muted);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.03em;
-    background: #060605;
-    border-top: 1px solid var(--hairline);
+    padding: 3vw 6vw 5vw;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.02em;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -237,62 +242,54 @@
   }
 
   :focus-visible{
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    outline: 1px solid var(--text-dim);
+    outline-offset: 3px;
   }
 </style>
 </head>
 <body>
 
-<div class="sprocket-strip" aria-hidden="true"></div>
-
 <header>
   <p class="eyebrow">Roll 001 — Joo Chiat, Jan 2026</p>
   <h1>Frames, kept.</h1>
-  <p class="sub">A walk through Joo Chiat, shot on the Olympus E-M1 Mark II. Tap any frame for the full-resolution original.</p>
+  <p class="sub">A walk through Joo Chiat, shot on the Olympus E-M5 Mark II. Tap any photograph to view it full size.</p>
 </header>
 
 <main>
   <div class="gallery" id="gallery"></div>
 </main>
 
-<div class="sprocket-strip" aria-hidden="true"></div>
-
 <footer>
-  Hosted on GitHub Pages · Media served via Cloudinary · Updated by hand
+  Hosted on GitHub Pages · Media served via Cloudinary
 </footer>
 
 <div class="lightbox" id="lightbox">
-  <div class="lightbox-panel">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <div class="lightbox-stage">
     <img id="lightbox-img" src="" alt="">
-    <p class="lightbox-caption" id="lightbox-caption"></p>
-    <div class="lightbox-actions">
-      <a id="lightbox-download" href="#" download>Download full-res</a>
-      <button id="lightbox-close" type="button">Close</button>
-    </div>
   </div>
+  <div class="lightbox-info">
+    <p class="lightbox-title" id="lightbox-title"></p>
+    <p class="lightbox-meta" id="lightbox-meta"></p>
+    <p class="lightbox-exif" id="lightbox-exif"></p>
+    <a class="lightbox-download" id="lightbox-download" href="#" download>Download original</a>
+  </div>
+  <div class="lightstrip" id="lightstrip"></div>
 </div>
 
 <script>
-  // ---------------------------------------------------------------
-  // Replace the entries below with your own Cloudinary photos.
-  // "src"      -> your Cloudinary delivery URL (with transformations for
-  //               the thumbnail, e.g. w_600,c_fill,q_auto,f_auto)
-  // "download" -> the full-resolution original, e.g. add fl_attachment
-  //               to the same public_id with no size transform
-  // ---------------------------------------------------------------
-  // Cloudinary cloud name
   const CLOUD_NAME = "ikxlglox";
 
   function thumb(publicId){
-    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_600,c_fill,q_auto,f_auto/${publicId}.jpg`;
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_800,q_auto,f_auto/${publicId}.jpg`;
+  }
+  function stageImg(publicId){
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1600,q_auto,f_auto/${publicId}.jpg`;
   }
   function full(publicId){
     return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/fl_attachment/${publicId}.jpg`;
   }
 
-  // Edit the "title" fields below to caption each photo as you like.
-  // Camera/lens/location are placeholders — update to match each shot.
   const publicIds = [
     "20260117_EM50253_qrspor",
     "20260117_EM50256_v46lnb",
@@ -328,71 +325,74 @@
   ];
 
   const titles = [
-      "A shophouse in Joo Chiat blue, morning light catching the arches upstairs",
+    "A shophouse in Joo Chiat blue, morning light catching the arches upstairs",
     "Weathered shutters and peeling paint — decades layered into the facade",
     "Two friends pause mid-conversation, a mural watching over the street",
     "A bicycle rests on a hand-painted stretch of road, colour underfoot",
     "A street cat holds its ground, unbothered by the lens",
     "A small shrine built into a mural wall, tucked between colour and concrete",
     "Framed by carved wood, a moment of shared delight at a shopfront window",
-    "A quiet corner of commerce",
+    "Notes and receipts pinned above a red scarf — a quiet corner of commerce",
     "A spiral staircase winds up the side of a sun-faded yellow shophouse",
     "Blue and yellow trade places on adjoining facades, a rhythm of colour along the row",
     "Ornate pilasters frame the everyday — a walk past painted heritage",
     "The Barkery's sign hangs quiet, waiting for its next customer",
     "A figure crosses a shaded breezeway, black frames against white walls",
-    "House number 367, painted in a small mosaic",
-    "The Panic Room's shopfront, layered in stickers and signage",
-    "A quiet coffee break, phone in hand",
-    "444 Joo Chiat Road — a snack counter mid-morning",
-    "A figure walks the breezeway between shophouses",
-    "Katong Bakery's red facade as traffic passes",
-    "A man captured in a moving van's frame",
+    "House number 67, painted in a small mosaic — Joo Chiat's quiet signage",
+    "The Panic Room's shopfront, layered in stickers and signage — a barbershop with a punk edge",
+    "A quiet coffee break, phone in hand, morning light through the window",
+    "444 Joo Chiat Road — a snack counter mid-morning, glass case catching the light",
+    "A figure walks the breezeway between shophouses, a cone marking a wet floor",
+    "Katong Bakery's red facade, arches catching the afternoon sun as traffic passes",
+    "A closer look at the same red row — reflections of the street layered into its windows",
     "Geometric brick lattice — a modern counterpoint to the heritage shophouses nearby",
-    "328 Katong Laksa, a Joo Chiat anchor",
-    "Katong Shopping Centre's blue facade",
+    "328 Katong Laksa, a Joo Chiat institution, signage bright against red tile",
+    "Katong Shopping Centre's blue facade, round windows like portholes",
     "A water lily opens fully, purple petals around a gold centre",
-    "A craftsman works bare-shouldered at an open-air stall",
-    "Hands at work",
-    "Two riders check a phone before the next delivery",
-    "Tin Yeang Restaurant's sign beside a red car",
+    "A craftsman works bare-shouldered at an open-air stall, tools spread before him",
+    "Hands at work over a small plant, a bicycle waiting close by",
+    "Two riders check a phone before the next delivery, helmets still on",
+    "Tin Yeang Restaurant's sign beside a red car — a street caught between eras",
     "Figment's pink and blue shophouse, a woman in a sun hat passing by",
-    "The same pastel row, another passerby",
+    "The same pastel row, another passerby, a green bin in tow",
     "Koon Seng Road meets Tembeling — a convex mirror holding the street in miniature"
   ];
 
+  // Fill in real EXIF per photo once available, e.g.:
+  // { focalLength: "25mm", aperture: "f/4", shutterSpeed: "1/640s", iso: "200" }
+  const exifData = {};
+
   const photos = publicIds.map((id, i) => ({
+    id,
     title: titles[i],
-    src: thumb(id),
+    thumb: thumb(id),
+    stage: stageImg(id),
     download: full(id),
-    location: "Joo Chiat, SG"
+    location: "Joo Chiat, SG",
+    exif: exifData[id] || null
   }));
 
   const gallery = document.getElementById('gallery');
+  const strip = document.getElementById('lightstrip');
 
   photos.forEach((p, i) => {
     const fig = document.createElement('figure');
-    fig.className = 'frame';
-    fig.innerHTML = `
-      <div class="frame-photo" tabindex="0" role="button" aria-label="Open ${p.title} full size">
-        <span class="frame-number">F${String(i + 1).padStart(3, '0')}</span>
-        <img src="${p.src}" alt="${p.title}" loading="lazy">
-      </div>
-      <figcaption>
-        <span class="cap-title">${p.title}</span>
-        <span>${p.location}</span>
-      </figcaption>
-    `;
+    fig.className = 'tile';
+    fig.innerHTML = `<img src="${p.thumb}" alt="${p.title}" loading="lazy">`;
+    fig.addEventListener('click', () => openLightbox(i));
     gallery.appendChild(fig);
 
-    const opener = () => openLightbox(p);
-    fig.querySelector('.frame-photo').addEventListener('click', opener);
-    fig.querySelector('.frame-photo').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); opener(); }
+    const stripImg = document.createElement('img');
+    stripImg.src = p.thumb;
+    stripImg.alt = p.title;
+    stripImg.dataset.index = i;
+    stripImg.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openLightbox(i);
     });
+    strip.appendChild(stripImg);
   });
 
-  // scroll reveal
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -400,30 +400,72 @@
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('figure.frame').forEach(f => io.observe(f));
+  }, { threshold: 0.08 });
+  document.querySelectorAll('figure.tile').forEach(f => io.observe(f));
 
   // lightbox
   const lightbox = document.getElementById('lightbox');
   const lbImg = document.getElementById('lightbox-img');
-  const lbCap = document.getElementById('lightbox-caption');
+  const lbTitle = document.getElementById('lightbox-title');
+  const lbMeta = document.getElementById('lightbox-meta');
+  const lbExif = document.getElementById('lightbox-exif');
   const lbDownload = document.getElementById('lightbox-download');
   const lbClose = document.getElementById('lightbox-close');
+  let currentIndex = 0;
 
-  function openLightbox(p){
-    lbImg.src = p.download;
-    lbImg.alt = p.title;
-    lbCap.textContent = `${p.title} — ${p.location}`;
-    lbDownload.href = p.download;
+  function openLightbox(index){
+    currentIndex = index;
+    renderLightbox();
     lightbox.classList.add('open');
   }
+
+  function renderLightbox(){
+    const p = photos[currentIndex];
+    lbImg.classList.remove('shown');
+    const nextSrc = p.stage;
+    const preload = new Image();
+    preload.onload = () => {
+      lbImg.src = nextSrc;
+      requestAnimationFrame(() => lbImg.classList.add('shown'));
+    };
+    preload.src = nextSrc;
+
+    lbImg.alt = p.title;
+    lbTitle.textContent = p.title;
+    lbMeta.textContent = p.location;
+
+    if (p.exif) {
+      const parts = [p.exif.focalLength, p.exif.aperture, p.exif.shutterSpeed, p.exif.iso ? `ISO ${p.exif.iso}` : null].filter(Boolean);
+      lbExif.textContent = parts.join(' · ');
+      lbExif.style.display = parts.length ? 'block' : 'none';
+    } else {
+      lbExif.textContent = '';
+      lbExif.style.display = 'none';
+    }
+
+    lbDownload.href = p.download;
+
+    strip.querySelectorAll('img').forEach((el, i) => {
+      el.classList.toggle('active', i === currentIndex);
+    });
+    const activeStripImg = strip.children[currentIndex];
+    if (activeStripImg) activeStripImg.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
   function closeLightbox(){
     lightbox.classList.remove('open');
-    lbImg.src = "";
   }
+
   lbClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % photos.length; renderLightbox(); }
+    if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + photos.length) % photos.length; renderLightbox(); }
+  });
 </script>
 
 </body>
