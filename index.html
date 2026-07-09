@@ -247,9 +247,9 @@
 <div class="sprocket-strip" aria-hidden="true"></div>
 
 <header>
-  <p class="eyebrow">Roll 001 — Singapore &amp; beyond</p>
+  <p class="eyebrow">Roll 001 — Joo Chiat, Jan 2026</p>
   <h1>Frames, kept.</h1>
-  <p class="sub">A running contact sheet — trips, gear tests, and the odd pickleball blur. Shot on an Olympus E-M1 Mark II and an iPhone 16 Pro Max. Tap any frame for the full-resolution original.</p>
+  <p class="sub">A walk through Joo Chiat, shot on the Olympus E-M1 Mark II. Tap any frame for the full-resolution original.</p>
 </header>
 
 <main>
@@ -281,56 +281,37 @@
   // "download" -> the full-resolution original, e.g. add fl_attachment
   //               to the same public_id with no size transform
   // ---------------------------------------------------------------
+  // Cloudinary cloud name
+  const CLOUD_NAME = "ikxlglox";
+  const FOLDER = "Joo-Chiat-26";
+
+  function thumb(publicId){
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_600,c_fill,q_auto,f_auto/${FOLDER}/${publicId}`;
+  }
+  function full(publicId){
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/fl_attachment/${FOLDER}/${publicId}`;
+  }
+
+  // Edit the "title" fields below to caption each photo as you like.
+  // Camera/lens/location are placeholders — update to match each shot.
   const photos = [
-    {
-      title: "Kings Park, Perth",
-      src: "https://picsum.photos/id/1015/600/750",
-      download: "https://picsum.photos/id/1015/2400/3000",
-      camera: "Olympus E-M1 II",
-      lens: "12-40mm f/2.8",
-      location: "Perth, WA"
-    },
-    {
-      title: "Marina Bay, dusk",
-      src: "https://picsum.photos/id/1016/600/750",
-      download: "https://picsum.photos/id/1016/2400/3000",
-      camera: "iPhone 16 Pro Max",
-      lens: "24mm",
-      location: "Singapore"
-    },
-    {
-      title: "Court side",
-      src: "https://picsum.photos/id/1024/600/750",
-      download: "https://picsum.photos/id/1024/2400/3000",
-      camera: "iPhone 16 Pro Max",
-      lens: "48mm",
-      location: "Singapore"
-    },
-    {
-      title: "Swan River, morning",
-      src: "https://picsum.photos/id/1039/600/750",
-      download: "https://picsum.photos/id/1039/2400/3000",
-      camera: "Olympus E-M1 II",
-      lens: "40-150mm f/2.8",
-      location: "Perth, WA"
-    },
-    {
-      title: "Hawker lanes",
-      src: "https://picsum.photos/id/1040/600/750",
-      download: "https://picsum.photos/id/1040/2400/3000",
-      camera: "iPhone 16 Pro Max",
-      lens: "24mm",
-      location: "Singapore"
-    },
-    {
-      title: "Cottesloe, low tide",
-      src: "https://picsum.photos/id/1043/600/750",
-      download: "https://picsum.photos/id/1043/2400/3000",
-      camera: "Olympus E-M1 II",
-      lens: "12-40mm f/2.8",
-      location: "Perth, WA"
-    }
-  ];
+    { id: "20260117_EM50524_ihny15", title: "Joo Chiat, frame 1", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50297_wqhqj8", title: "Joo Chiat, frame 2", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50322_yvdbud", title: "Joo Chiat, frame 3", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50343_mxaldi", title: "Joo Chiat, frame 4", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50313_k1u3um", title: "Joo Chiat, frame 5", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50400_eplatr", title: "Joo Chiat, frame 6", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50604_ogsmc9", title: "Joo Chiat, frame 7", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50372_qomvur", title: "Joo Chiat, frame 8", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" },
+    { id: "20260117_EM50517_yokw6l", title: "Joo Chiat, frame 9", camera: "Olympus E-M1 II", lens: "12-40mm f/2.8", location: "Joo Chiat, SG" }
+  ].map(p => ({
+    title: p.title,
+    src: thumb(p.id),
+    download: full(p.id),
+    camera: p.camera,
+    lens: p.lens,
+    location: p.location
+  }));
 
   const gallery = document.getElementById('gallery');
 
