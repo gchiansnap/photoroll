@@ -1,34 +1,44 @@
-// Central place to configure the site. Edit this file to change
-// cloud name, which tags drive the homepage, or to add new albums.
+# photoroll
 
-const CONFIG = {
-  cloudName: "ikxlglox",
+A personal photo journal, hosted on GitHub Pages, with images served through Cloudinary.
 
-  // Photos tagged "hero" in Cloudinary show up as the homepage hero.
-  // If more than one photo has this tag, the first one returned is used.
-  heroTag: "hero",
+## Structure
 
-  // Photos tagged "feature" in Cloudinary show up in the "Featured work"
-  // section on the homepage. Tag up to 6 for the best layout.
-  featureTag: "feature",
+```
+photoroll/
+├── index.html          Homepage — hero, featured shots, gear blurb, album links
+├── albums/
+│   └── joochiat.html    An album page (one per "roll")
+├── css/
+│   └── main.css         Shared styles for the whole site
+├── js/
+│   ├── config.js        Cloud name, tag names, album list — edit this to configure the site
+│   ├── cloudinary.js     Shared helpers for building URLs and fetching photos by tag
+│   └── home.js           Homepage-specific logic
+└── assets/               Any static files not served from Cloudinary (currently unused)
+```
 
-  // Each album pulls its photos live from Cloudinary by tag — tag a
-  // photo with an album's tag to add it, remove the tag to drop it.
-  // To add a new album: tag some photos in Cloudinary, then add one
-  // entry here and a matching page in /albums.
-  albums: [
-    {
-      slug: "joochiat",
-      title: "Joo Chiat",
-      subtitle: "Roll 001 — Jan 2026",
-      tag: "joochiat",
-      description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
-    }
-  ],
+## How photos get on the site
 
-  // Brief gear description shown on the homepage.
-  gear: {
-    heading: "Gear",
-    body: "Shot primarily on an Olympus E-M5 Mark II with a mix of prime and zoom micro four-thirds glass, alongside an iPhone 16 Pro Max for quicker, unplanned frames. No fixed kit — whatever fits the walk that day."
-  }
-};
+Nothing here is hardcoded to a specific photo. Every gallery — the homepage hero,
+the featured strip, and each album — is built by fetching photos **by Cloudinary tag**
+at page-load time, using Cloudinary's public, unauthenticated tag-list endpoint.
+
+- Tag a photo `hero` in Cloudinary → it becomes the homepage hero.
+- Tag up to 6 photos `feature` → they appear in "Featured work" on the homepage.
+- Tag photos with an album's tag (e.g. `joochiat`) → they appear in that album.
+- Remove a tag → the photo disappears from that section.
+
+Cloudinary caches these tag lists for about 60 seconds, so changes show up within a minute.
+
+Captions come from each photo's **context metadata** in Cloudinary (the `caption` field).
+If a photo has no caption set, the album's title is used as a fallback.
+
+## Adding a new album
+
+1. Tag some photos in Cloudinary with a new tag, e.g. `bali2026`.
+2. Add an entry to the `albums` array in `js/config.js`.
+3. Copy `albums/joochiat.html`, rename it to match your new slug, and update the `slug` constant near the bottom of the file to match.
+4. Add a link — it'll show up automatically on the homepage once it's in `config.js`.
+
+See `DEPLOYMENT.md` for how to push changes live.

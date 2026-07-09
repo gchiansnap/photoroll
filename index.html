@@ -1,42 +1,48 @@
-// Shared Cloudinary helpers. Uses the public, unauthenticated
-// "list by tag" endpoint — no API key/secret needed, safe for a
-// public static site. Cloudinary caches this for ~60 seconds, so
-// tag changes on their end show up here within a minute.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frames — a photo journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
 
-const Cloudinary = {
-  thumbUrl(publicId, width = 800) {
-    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/w_${width},q_auto,f_auto/${publicId}.jpg`;
-  },
+<div class="hero">
+  <img id="hero-img" src="" alt="">
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Frames — a photo journal</p>
+    <h1 class="hero-title">Frames, kept.</h1>
+    <p class="hero-sub">A running record of walks, cities, and the odd unplanned frame.</p>
+  </div>
+</div>
 
-  stageUrl(publicId, width = 1600) {
-    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/w_${width},q_auto,f_auto/${publicId}.jpg`;
-  },
+<section class="featured">
+  <h2>Featured work</h2>
+  <div class="feature-grid" id="feature-grid"></div>
+</section>
 
-  downloadUrl(publicId) {
-    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/fl_attachment/${publicId}.jpg`;
-  },
+<section class="gear">
+  <h2 id="gear-heading">Gear</h2>
+  <p id="gear-body"></p>
+</section>
 
-  // Returns a promise resolving to an array of resource objects:
-  // { public_id, tags, context, width, height, format, ... }
-  // Photos are sorted here by public_id ascending; re-sort in
-  // calling code if you want a different order.
-  async fetchByTag(tag) {
-    const url = `https://res.cloudinary.com/${CONFIG.cloudName}/image/list/${tag}.json`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      console.error(`Cloudinary tag "${tag}" fetch failed:`, res.status);
-      return [];
-    }
-    const data = await res.json();
-    const resources = data.resources || [];
-    resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
-    return resources;
-  },
+<section class="albums">
+  <h2>Rolls</h2>
+  <div class="album-list" id="album-list"></div>
+</section>
 
-  // Pulls a human caption out of a resource's context metadata,
-  // falling back to a generic label if none was set in Cloudinary.
-  captionFor(resource, fallback = "") {
-    return (resource.context && resource.context.custom && resource.context.custom.caption)
-      || fallback;
-  }
-};
+<footer>
+  Hosted on GitHub Pages · Media served via Cloudinary
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/cloudinary.js"></script>
+<script src="js/home.js"></script>
+
+</body>
+</html>
