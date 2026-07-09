@@ -1,0 +1,42 @@
+// Shared Cloudinary helpers. Uses the public, unauthenticated
+// "list by tag" endpoint — no API key/secret needed, safe for a
+// public static site. Cloudinary caches this for ~60 seconds, so
+// tag changes on their end show up here within a minute.
+
+const Cloudinary = {
+  thumbUrl(publicId, width = 800) {
+    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/w_${width},q_auto,f_auto/${publicId}.jpg`;
+  },
+
+  stageUrl(publicId, width = 1600) {
+    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/w_${width},q_auto,f_auto/${publicId}.jpg`;
+  },
+
+  downloadUrl(publicId) {
+    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/fl_attachment/${publicId}.jpg`;
+  },
+
+  // Returns a promise resolving to an array of resource objects:
+  // { public_id, tags, context, width, height, format, ... }
+  // Photos are sorted here by public_id ascending; re-sort in
+  // calling code if you want a different order.
+  async fetchByTag(tag) {
+    const url = `https://res.cloudinary.com/${CONFIG.cloudName}/image/list/${tag}.json`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      console.error(`Cloudinary tag "${tag}" fetch failed:`, res.status);
+      return [];
+    }
+    const data = await res.json();
+    const resources = data.resources || [];
+    resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
+    return resources;
+  },
+
+  // Pulls a human caption out of a resource's context metadata,
+  // falling back to a generic label if none was set in Cloudinary.
+  captionFor(resource, fallback = "") {
+    return (resource.context && resource.context.custom && resource.context.custom.caption)
+      || fallback;
+  }
+};
