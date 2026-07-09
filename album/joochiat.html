@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joo Chiat — Frames</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+
+<a class="back-link" href="../index.html">&larr; Frames</a>
+
+<header class="page-header" id="album-header">
+  <p class="eyebrow" id="album-eyebrow"></p>
+  <h1 id="album-title"></h1>
+  <p class="sub" id="album-desc"></p>
+</header>
+
+<main>
+  <div class="gallery" id="gallery"></div>
+</main>
+
+<footer>
+  Hosted on GitHub Pages · Media served via Cloudinary
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <div class="lightbox-stage">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+  <div class="lightbox-info">
+    <p class="lightbox-title" id="lightbox-title"></p>
+    <p class="lightbox-meta" id="lightbox-meta"></p>
+    <p class="lightbox-exif" id="lightbox-exif"></p>
+    <a class="lightbox-download" id="lightbox-download" href="#" download>Download original</a>
+  </div>
+  <div class="lightstrip" id="lightstrip"></div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/cloudinary.js"></script>
+<script>
+  // This album is defined in js/config.js — find it by matching the
+  // filename of this page against each album's slug.
+  const slug = "joochiat";
+  const album = CONFIG.albums.find(a => a.slug === slug);
+
+  let photos = [];
+  let currentIndex = 0;
+
+  function renderHeader() {
+    document.getElementById('album-eyebrow').textContent = album.subtitle;
+    document.getElementById('album-title').textContent = album.title;
+    document.getElementById('album-desc').textContent = album.description;
+    document.title = `${album.title} — Frames`;
+  }
+
+  function renderGallery() {
+    const gallery = document.getElementById('gallery');
+    const strip = document.getElementById('lightstrip');
+    gallery.innerHTML = '';
+    strip.innerHTML = '';
+
+    photos.forEach((p, i) => {
+      const fig = document.createElement('figure');
+      fig.className = 'tile';
+      fig.innerHTML = `<img src="${p.thumb}" alt="${p.title}" loading="lazy">`;
+      fig.addEventListener('click', () => openLightbox(i));
+      gallery.appendChild(fig);
+
+      const stripImg = document.createElement('img');
+      stripImg.src = p.thumb;
+      stripImg.alt = p.title;
+      stripImg.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openLightbox(i);
+      });
+      strip.appendChild(stripImg);
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('figure.tile').forEach(f => io.observe(f));
+  }
+
+  // --- lightbox ---
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbTitle = document.getElementById('lightbox-title');
+  const lbMeta = document.getElementById('lightbox-meta');
+  const lbExif = document.getElementById('lightbox-exif');
+  const lbDownload = document.getElementById('lightbox-download');
+  const lbClose = document.getElementById('lightbox-close');
+  const strip = document.getElementById('lightstrip');
+
+  function openLightbox(index) {
+    currentIndex = index;
+    renderLightbox();
+    lightbox.classList.add('open');
+  }
+
+  function renderLightbox() {
+    const p = photos[currentIndex];
+    lbImg.classList.remove('shown');
+    const preload = new Image();
+    preload.onload = () => {
+      lbImg.src = p.stage;
+      requestAnimationFrame(() => lbImg.classList.add('shown'));
+    };
+    preload.src = p.stage;
+
+    lbImg.alt = p.title;
+    lbTitle.textContent = p.title;
+    lbMeta.textContent = p.location;
+
+    if (p.exif) {
+      const parts = [p.exif.focalLength, p.exif.aperture, p.exif.shutterSpeed, p.exif.iso ? `ISO ${p.exif.iso}` : null].filter(Boolean);
+      lbExif.textContent = parts.join(' · ');
+      lbExif.style.display = parts.length ? 'block' : 'none';
+    } else {
+      lbExif.textContent = '';
+      lbExif.style.display = 'none';
+    }
+
+    lbDownload.href = p.download;
+
+    strip.querySelectorAll('img').forEach((el, i) => el.classList.toggle('active', i === currentIndex));
+    const activeStripImg = strip.children[currentIndex];
+    if (activeStripImg) activeStripImg.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  function closeLightbox() { lightbox.classList.remove('open'); }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % photos.length; renderLightbox(); }
+    if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + photos.length) % photos.length; renderLightbox(); }
+  });
+
+  // --- load photos by tag ---
+  async function init() {
+    renderHeader();
+    const resources = await Cloudinary.fetchByTag(album.tag);
+
+    if (!resources.length) {
+      document.getElementById('gallery').innerHTML =
+        `<p style="color: var(--text-dim); font-size: 0.9rem;">No photos tagged "${album.tag}" yet — tag some in Cloudinary to populate this album.</p>`;
+      return;
+    }
+
+    photos = resources.map((r) => ({
+      id: r.public_id,
+      title: Cloudinary.captionFor(r, album.title),
+      thumb: Cloudinary.thumbUrl(r.public_id, 800),
+      stage: Cloudinary.stageUrl(r.public_id, 1600),
+      download: Cloudinary.downloadUrl(r.public_id),
+      location: album.title,
+      exif: r.image_metadata ? {
+        focalLength: r.image_metadata.FocalLength,
+        aperture: r.image_metadata.FNumber ? `f/${r.image_metadata.FNumber}` : null,
+        shutterSpeed: r.image_metadata.ExposureTime,
+        iso: r.image_metadata.ISOSpeedRatings
+      } : null
+    }));
+
+    renderGallery();
+  }
+
+  init();
+</script>
+
+</body>
+</html>
