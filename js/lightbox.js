@@ -16,6 +16,7 @@ const Lightbox = {
     this.imgEl = document.getElementById('lightbox-img');
     this.titleEl = document.getElementById('lightbox-title');
     this.metaEl = document.getElementById('lightbox-meta');
+    this.gearEl = document.getElementById('lightbox-gear');
     this.exifEl = document.getElementById('lightbox-exif');
     this.downloadEl = document.getElementById('lightbox-download');
     this.closeEl = document.getElementById('lightbox-close');
@@ -100,10 +101,16 @@ const Lightbox = {
     this.metaEl.textContent = p.location || '';
 
     if (p.exif) {
-      const parts = [p.exif.focalLength, p.exif.aperture, p.exif.shutterSpeed, p.exif.iso ? `ISO ${p.exif.iso}` : null].filter(Boolean);
-      this.exifEl.textContent = parts.join(' · ');
-      this.exifEl.style.display = parts.length ? 'block' : 'none';
+      const gearParts = [p.exif.camera, p.exif.lens].filter(Boolean);
+      this.gearEl.textContent = gearParts.join(' · ');
+      this.gearEl.style.display = gearParts.length ? 'block' : 'none';
+
+      const settingsParts = [p.exif.focalLength, p.exif.aperture, p.exif.shutterSpeed, p.exif.iso ? `ISO ${p.exif.iso}` : null].filter(Boolean);
+      this.exifEl.textContent = settingsParts.join(' · ');
+      this.exifEl.style.display = settingsParts.length ? 'block' : 'none';
     } else {
+      this.gearEl.textContent = '';
+      this.gearEl.style.display = 'none';
       this.exifEl.textContent = '';
       this.exifEl.style.display = 'none';
     }
