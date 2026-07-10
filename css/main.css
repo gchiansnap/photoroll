@@ -123,8 +123,20 @@ header.page-header p.sub{
   font-size: 1.05rem;
   color: rgba(245,245,247,0.8);
   max-width: 40ch;
-  margin: 0;
+  margin: 0 0 1.6rem;
 }
+
+.hero-about-link{
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(245,245,247,0.75);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.hero-about-link:hover{ color: var(--text); border-color: rgba(245,245,247,0.5); }
 
 /* ---------- section headings ---------- */
 section{
@@ -175,6 +187,56 @@ section h2{
   color: var(--text-dim);
   max-width: 52ch;
   margin: 0;
+}
+
+/* ---------- about page ---------- */
+.about-intro p{
+  font-weight: 300;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text-dim);
+  max-width: 56ch;
+  margin: 0 0 1.4rem;
+}
+.about-intro p:last-child{ margin-bottom: 0; }
+
+.gear-intro{
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  max-width: 52ch;
+  margin: 0 0 2rem;
+}
+
+.gear-list{
+  display: flex;
+  flex-direction: column;
+}
+
+.gear-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--hairline);
+}
+.gear-list .gear-item:last-child{ border-bottom: 1px solid var(--hairline); }
+
+.gear-type{
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.gear-name{
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text);
+  text-align: right;
 }
 
 /* ---------- album links ---------- */
