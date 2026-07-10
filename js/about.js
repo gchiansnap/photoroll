@@ -1,6 +1,19 @@
 // About page logic — pulls bio and gear content from CONFIG.about
 // (see js/config.js). Edit that file to change what's shown here.
 
+async function initAboutHero() {
+  const resources = await Cloudinary.fetchByTag(CONFIG.aboutHeroTag);
+  const heroEl = document.getElementById('about-hero-img');
+  if (!resources.length) {
+    console.warn(`No photo tagged "${CONFIG.aboutHeroTag}" found in Cloudinary.`);
+    return;
+  }
+  const hero = resources[0];
+  heroEl.src = Cloudinary.stageUrl(hero.public_id, 1800);
+  heroEl.alt = Cloudinary.captionFor(hero, "About page banner");
+  heroEl.onload = () => heroEl.classList.add('loaded');
+}
+
 function initAbout() {
   const introEl = document.getElementById('about-intro');
   introEl.innerHTML = '';
@@ -25,4 +38,5 @@ function initAbout() {
   });
 }
 
+initAboutHero();
 initAbout();
