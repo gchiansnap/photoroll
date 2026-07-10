@@ -25,7 +25,7 @@ const CONFIG = {
     {
       slug: "joochiat",
       title: "Joo Chiat",
-      subtitle: "Roll 001 — Jan 2026",
+      subtitle: "Jan 2026",
       tag: "joochiat",
       description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
     }

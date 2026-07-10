@@ -28,11 +28,26 @@ async function initFeatured() {
     return;
   }
 
-  resources.slice(0, 6).forEach((r) => {
-    const caption = Cloudinary.captionFor(r, '');
+  const photos = resources.slice(0, 6).map((r) => ({
+    id: r.public_id,
+    title: Cloudinary.captionFor(r, ''),
+    thumb: Cloudinary.thumbUrl(r.public_id, 900),
+    stage: Cloudinary.stageUrl(r.public_id, 1600),
+    download: Cloudinary.downloadUrl(r.public_id),
+    location: '',
+    exif: r.image_metadata ? {
+      focalLength: r.image_metadata.FocalLength,
+      aperture: r.image_metadata.FNumber ? `f/${r.image_metadata.FNumber}` : null,
+      shutterSpeed: r.image_metadata.ExposureTime,
+      iso: r.image_metadata.ISOSpeedRatings
+    } : null
+  }));
+
+  photos.forEach((p, i) => {
     const fig = document.createElement('figure');
     fig.className = 'feature-tile';
-    fig.innerHTML = `<img src="${Cloudinary.thumbUrl(r.public_id, 900)}" alt="${caption}" loading="lazy">`;
+    fig.innerHTML = `<img src="${p.thumb}" alt="${p.title}" loading="lazy">`;
+    fig.addEventListener('click', () => Lightbox.open(photos, i));
     grid.appendChild(fig);
   });
 
