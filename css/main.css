@@ -303,6 +303,7 @@ figure.tile:hover img{ transform: scale(1.015); filter: brightness(1.04); }
 
 .lightbox-title{ font-weight: 300; font-size: 0.95rem; color: var(--text); margin: 0 0 0.3rem; }
 .lightbox-meta{ font-weight: 300; font-size: 0.8rem; color: var(--text-dim); margin: 0 0 0.3rem; }
+.lightbox-gear{ font-weight: 300; font-size: 0.75rem; letter-spacing: 0.02em; color: var(--text-dim); opacity: 0.65; margin: 0 0 0.2rem; }
 .lightbox-exif{ font-weight: 300; font-size: 0.75rem; letter-spacing: 0.02em; color: var(--text-dim); opacity: 0.75; margin: 0 0 0.9rem; }
 
 .lightbox-download{
