@@ -17,14 +17,16 @@ const Cloudinary = {
   },
 
   // Returns a promise resolving to an array of resource objects:
-  // { public_id, tags, context, width, height, format, ... }
+  // { public_id, tags, context, image_metadata }
+  // Fetched via a Cloudflare Worker that securely calls Cloudinary's
+  // Admin API on our behalf — see cloudflare-worker.js.
   // Photos are sorted here by public_id ascending; re-sort in
   // calling code if you want a different order.
   async fetchByTag(tag) {
-    const url = `https://res.cloudinary.com/${CONFIG.cloudName}/image/list/${tag}.json`;
+    const url = `${CONFIG.apiBaseUrl}/tag?tag=${encodeURIComponent(tag)}`;
     const res = await fetch(url);
     if (!res.ok) {
-      console.error(`Cloudinary tag "${tag}" fetch failed:`, res.status);
+      console.error(`Worker tag "${tag}" fetch failed:`, res.status);
       return [];
     }
     const data = await res.json();

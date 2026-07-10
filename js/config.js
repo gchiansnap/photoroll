@@ -4,6 +4,11 @@
 const CONFIG = {
   cloudName: "ikxlglox",
 
+  // Secure proxy that fetches tag data from Cloudinary's Admin API —
+  // needed because the public tag-list endpoint isn't available on
+  // this account. See cloudflare-worker.js for the Worker's source.
+  apiBaseUrl: "https://photoroll-api.gchian-b53.workers.dev",
+
   // Photos tagged "hero" in Cloudinary show up as the homepage hero.
   // If more than one photo has this tag, the first one returned is used.
   heroTag: "hero",
