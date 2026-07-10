@@ -57,11 +57,6 @@ async function initFeatured() {
   document.querySelectorAll('.feature-tile').forEach(f => io.observe(f));
 }
 
-function initGear() {
-  document.getElementById('gear-heading').textContent = CONFIG.gear.heading;
-  document.getElementById('gear-body').textContent = CONFIG.gear.body;
-}
-
 function initAlbumLinks() {
   const list = document.getElementById('album-list');
   list.innerHTML = '';
@@ -82,5 +77,4 @@ function initAlbumLinks() {
 
 initHero();
 initFeatured();
-initGear();
 initAlbumLinks();

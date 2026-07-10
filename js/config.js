@@ -31,9 +31,22 @@ const CONFIG = {
     }
   ],
 
-  // Brief gear description shown on the homepage.
-  gear: {
-    heading: "Gear",
-    body: "Shot primarily on an Olympus E-M5 Mark II with a mix of prime and zoom micro four-thirds glass, alongside an iPhone 16 Pro Max for quicker, unplanned frames. No fixed kit — whatever fits the walk that day."
+  // Content for the About page. Edit freely — this is the one place
+  // to update your bio and gear list.
+  about: {
+    intro: [
+      "I'm Greg — a Singapore-based photographer working mostly in street, travel, and nature.",
+      "Add a sentence or two here about what draws you to photography, or how you got started — this is a good spot for something personal.",
+      "Most of what ends up here comes from ordinary walks: a market street, a quiet trail, a corner turned at the right moment."
+    ],
+    gearIntro: "No single kit — whatever suits the walk that day. Currently rotating between:",
+    gear: [
+      { type: "Camera", name: "Olympus OM-D E-M1 Mark II" },
+      { type: "Camera", name: "Olympus OM-D E-M5 Mark II" },
+      { type: "Lens", name: "M.Zuiko Digital ED 12-100mm F4 IS PRO" },
+      { type: "Lens", name: "M.Zuiko Digital ED 60mm F2.8 Macro" },
+      { type: "Lens", name: "M.Zuiko Digital ED 25mm F1.8" },
+      { type: "Phone", name: "iPhone 16 Pro Max" }
+    ]
   }
 };
