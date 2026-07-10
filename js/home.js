@@ -35,12 +35,7 @@ async function initFeatured() {
     stage: Cloudinary.stageUrl(r.public_id, 1600),
     download: Cloudinary.downloadUrl(r.public_id),
     location: '',
-    exif: r.image_metadata ? {
-      focalLength: r.image_metadata.FocalLength,
-      aperture: r.image_metadata.FNumber ? `f/${r.image_metadata.FNumber}` : null,
-      shutterSpeed: r.image_metadata.ExposureTime,
-      iso: r.image_metadata.ISOSpeedRatings
-    } : null
+    exif: exifForPublicId(r.public_id)
   }));
 
   photos.forEach((p, i) => {
