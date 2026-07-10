@@ -22,7 +22,6 @@
 </div>
 
 <section class="featured">
-  <h2>Featured work</h2>
   <div class="feature-grid" id="feature-grid"></div>
 </section>
 
@@ -40,8 +39,25 @@
   Hosted on GitHub Pages · Media served via Cloudinary
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <span class="lightbox-nav prev" id="lightbox-prev" aria-label="Previous">&lsaquo;</span>
+  <span class="lightbox-nav next" id="lightbox-next" aria-label="Next">&rsaquo;</span>
+  <div class="lightbox-stage">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+  <div class="lightbox-info">
+    <p class="lightbox-title" id="lightbox-title"></p>
+    <p class="lightbox-meta" id="lightbox-meta"></p>
+    <p class="lightbox-exif" id="lightbox-exif"></p>
+    <a class="lightbox-download" id="lightbox-download" href="#" download>Download original</a>
+  </div>
+  <div class="lightstrip" id="lightstrip"></div>
+</div>
+
 <script src="js/config.js"></script>
 <script src="js/cloudinary.js"></script>
+<script src="js/lightbox.js"></script>
 <script src="js/home.js"></script>
 
 </body>
