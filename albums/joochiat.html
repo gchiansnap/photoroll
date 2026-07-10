@@ -45,6 +45,7 @@
 
 <script src="../js/config.js"></script>
 <script src="../js/cloudinary.js"></script>
+<script src="../js/exif-data.js"></script>
 <script src="../js/lightbox.js"></script>
 <script>
   // This album is defined in js/config.js — find it by matching the
@@ -102,12 +103,7 @@
       stage: Cloudinary.stageUrl(r.public_id, 1600),
       download: Cloudinary.downloadUrl(r.public_id),
       location: album.title,
-      exif: r.image_metadata ? {
-        focalLength: r.image_metadata.FocalLength,
-        aperture: r.image_metadata.FNumber ? `f/${r.image_metadata.FNumber}` : null,
-        shutterSpeed: r.image_metadata.ExposureTime,
-        iso: r.image_metadata.ISOSpeedRatings
-      } : null
+      exif: exifForPublicId(r.public_id)
     }));
 
     renderGallery();
