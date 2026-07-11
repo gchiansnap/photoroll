@@ -81,6 +81,14 @@ header.page-header p.sub{
   background: #0a0a0a;
 }
 
+.hero picture{
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .hero img{
   position: absolute;
   inset: 0;
@@ -98,6 +106,13 @@ header.page-header p.sub{
   min-height: 320px;
   overflow: hidden;
   background: #0a0a0a;
+}
+.about-hero picture{
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .about-hero img{
   position: absolute;
@@ -297,6 +312,63 @@ section h2{
   font-weight: 200;
   font-size: 1.2rem;
   color: var(--text-dim);
+}
+
+/* ---------- private gallery password gate ---------- */
+.password-gate{
+  max-width: 360px;
+  margin: 2vw 6vw 6vw;
+}
+.password-prompt{
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-weight: 300;
+  margin: 0 0 1.3rem;
+}
+#password-form{
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+}
+#password-input{
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--text);
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+}
+#password-input:focus{
+  outline: none;
+  border-color: var(--text-dim);
+}
+#password-form button{
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: 0.5rem 0;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+#password-form button:hover{
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+.password-error{
+  color: #c96b5e;
+  font-size: 0.8rem;
+  font-weight: 300;
+  margin: 1rem 0 0;
+  min-height: 1.2em;
 }
 
 /* ---------- masonry gallery (album pages) ---------- */
