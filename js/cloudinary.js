@@ -12,6 +12,14 @@ const Cloudinary = {
     return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/w_${width},q_auto,f_auto/${publicId}.jpg`;
   },
 
+  // Smart-cropped hero image: lets Cloudinary detect the subject
+  // (g_auto) and center the crop on it, rather than a flat geometric
+  // center-crop — keeps the subject framed consistently whether the
+  // box ends up tall (mobile) or wide (desktop).
+  heroUrl(publicId, aspectRatio, width) {
+    return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/c_fill,g_auto,ar_${aspectRatio},w_${width},q_auto,f_auto/${publicId}.jpg`;
+  },
+
   downloadUrl(publicId) {
     return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/fl_attachment/${publicId}.jpg`;
   },

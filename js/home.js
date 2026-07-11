@@ -8,12 +8,16 @@
 async function initHero() {
   const resources = await Cloudinary.fetchByTag(CONFIG.heroTag);
   const heroEl = document.getElementById('hero-img');
+  const mobileSource = document.getElementById('hero-source-mobile');
+  const desktopSource = document.getElementById('hero-source-desktop');
   if (!resources.length) {
     console.warn(`No photo tagged "${CONFIG.heroTag}" found in Cloudinary.`);
     return;
   }
   const hero = resources[0];
-  heroEl.src = Cloudinary.stageUrl(hero.public_id, 2000);
+  mobileSource.srcset = Cloudinary.heroUrl(hero.public_id, '3:4', 900);
+  desktopSource.srcset = Cloudinary.heroUrl(hero.public_id, '2:1', 2000);
+  heroEl.src = Cloudinary.heroUrl(hero.public_id, '2:1', 2000);
   heroEl.alt = Cloudinary.captionFor(hero, "Hero photograph");
   heroEl.onload = () => heroEl.classList.add('loaded');
 }

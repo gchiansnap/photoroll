@@ -4,12 +4,16 @@
 async function initAboutHero() {
   const resources = await Cloudinary.fetchByTag(CONFIG.aboutHeroTag);
   const heroEl = document.getElementById('about-hero-img');
+  const mobileSource = document.getElementById('about-hero-source-mobile');
+  const desktopSource = document.getElementById('about-hero-source-desktop');
   if (!resources.length) {
     console.warn(`No photo tagged "${CONFIG.aboutHeroTag}" found in Cloudinary.`);
     return;
   }
   const hero = resources[0];
-  heroEl.src = Cloudinary.stageUrl(hero.public_id, 1800);
+  mobileSource.srcset = Cloudinary.heroUrl(hero.public_id, '4:3', 800);
+  desktopSource.srcset = Cloudinary.heroUrl(hero.public_id, '3:1', 1800);
+  heroEl.src = Cloudinary.heroUrl(hero.public_id, '3:1', 1800);
   heroEl.alt = Cloudinary.captionFor(hero, "About page banner");
   heroEl.onload = () => heroEl.classList.add('loaded');
 }

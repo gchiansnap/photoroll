@@ -49,13 +49,14 @@ const CONFIG = {
       { type: "Camera", name: "Olympus OM-D E-M1 Mark II" },
       { type: "Camera", name: "Olympus OM-D E-M5 Mark II" },
       { type: "Lens", name: "M.Zuiko Digital ED 12-100mm F4 IS PRO" },
-      { type: "Lens", name: "M.Zuiko Digital ED 40-150mm F2.8 PRO" },
-      { type: "Lens", name: "M.Zuiko Digital ED 60mm F2.8 Macro" },
-      { type: "Lens", name: "M.Zuiko Digital ED 12mm F2.0" },
       { type: "Lens", name: "M.Zuiko Digital ED 25mm F1.8" },
-      { type: "Lens", name: "M.Zuiko Digital 45mm F1.8" },
+      { type: "Lens", name: "M.Zuiko Digital ED 40-150mm F2.8 PRO" },
+      { type: "Lens", name: "M.Zuiko Digital ED 12mm F2.0" },
       { type: "Lens", name: "M.Zuiko Digital ED 14-42mm F3.5-5.6 EZ" },
+      { type: "Lens", name: "M.Zuiko Digital 45mm F1.8" },
+      { type: "Lens", name: "M.Zuiko Digital ED 60mm F2.8 Macro" },
       { type: "Lens", name: "M.Zuiko Digital ED 40-150mm F4.0-5.6 R" },
+      { type: "Phone", name: "iPhone 16 Pro Max" }
     ]
   }
 };
