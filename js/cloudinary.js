@@ -38,7 +38,12 @@ const Cloudinary = {
       return [];
     }
     const data = await res.json();
-    const resources = data.resources || [];
+    return Cloudinary.sortResources(data.resources || []);
+  },
+
+  // Shared sort so every gallery (public or private) orders photos
+  // the same way, regardless of which endpoint fetched them.
+  sortResources(resources) {
     resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
     return resources;
   },

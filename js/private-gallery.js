@@ -21,7 +21,7 @@ const galleryEl = document.getElementById('gallery');
 function renderGallery(resources) {
   const photos = resources.map((r) => ({
     id: r.public_id,
-    title: Cloudinary.captionFor(r, title),
+    title: Cloudinary.captionFor(r, ''),
     thumb: Cloudinary.thumbUrl(r.public_id, 800),
     stage: Cloudinary.stageUrl(r.public_id, 1600),
     download: Cloudinary.downloadUrl(r.public_id),
@@ -82,7 +82,7 @@ async function tryPassword(password) {
 
   const data = await res.json();
   sessionStorage.setItem(`gallery-pw:${tag}`, password);
-  renderGallery(data.resources || []);
+  renderGallery(Cloudinary.sortResources(data.resources || []));
   return true;
 }
 

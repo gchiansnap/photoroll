@@ -97,7 +97,9 @@ const Lightbox = {
     preload.src = p.stage;
     this.imgEl.alt = p.title || '';
 
-    this.titleEl.textContent = p.title || '';
+    const hasTitle = Boolean(p.title && p.title.trim().length > 0);
+    this.titleEl.textContent = hasTitle ? p.title : '';
+    this.titleEl.style.display = hasTitle ? 'block' : 'none';
     this.metaEl.textContent = p.location || '';
 
     if (p.exif) {
