@@ -17,7 +17,11 @@
 <body>
 
 <div class="hero">
-  <img id="hero-img" src="" alt="">
+  <picture>
+    <source id="hero-source-mobile" media="(max-width: 700px)" srcset="">
+    <source id="hero-source-desktop" media="(min-width: 701px)" srcset="">
+    <img id="hero-img" src="" alt="">
+  </picture>
   <div class="hero-scrim"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Street &bull; Travel &bull; Nature</p>
