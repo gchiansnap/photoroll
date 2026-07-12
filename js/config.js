@@ -32,6 +32,27 @@ const CONFIG = {
       subtitle: "Jan 2026",
       tag: "joochiat",
       description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
+    },
+    {
+      slug: "animals",
+      title: "Animals",
+      subtitle: "An ongoing collection",
+      tag: "animals",
+      description: "Creatures encountered along the way — wild, stray, and everything in between."
+    },
+    {
+      slug: "architecture",
+      title: "Architecture",
+      subtitle: "An ongoing collection",
+      tag: "architecture",
+      description: "Facades, structures, and the shapes cities take."
+    },
+    {
+      slug: "street",
+      title: "Street",
+      subtitle: "An ongoing collection",
+      tag: "street",
+      description: "Unscripted moments from streets and sidewalks."
     }
   ],
 
