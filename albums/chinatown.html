@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinatown — GCHIANSNAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="../assets/favicon-96x96.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
+</head>
+<body>
+
+<a class="back-link" href="../index.html">&larr; GCHIANSNAP</a>
+
+<header class="page-header" id="album-header">
+  <p class="eyebrow" id="album-eyebrow"></p>
+  <h1 id="album-title"></h1>
+  <p class="sub" id="album-desc"></p>
+</header>
+
+<main>
+  <div class="gallery" id="gallery"></div>
+</main>
+
+<footer>
+  Hosted on GitHub Pages · Media served via Cloudinary
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <span class="lightbox-nav prev" id="lightbox-prev" aria-label="Previous">&lsaquo;</span>
+  <span class="lightbox-nav next" id="lightbox-next" aria-label="Next">&rsaquo;</span>
+  <div class="lightbox-stage">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+  <div class="lightbox-info">
+    <p class="lightbox-title" id="lightbox-title"></p>
+    <p class="lightbox-meta" id="lightbox-meta"></p>
+    <p class="lightbox-gear" id="lightbox-gear"></p>
+    <p class="lightbox-exif" id="lightbox-exif"></p>
+    <a class="lightbox-download" id="lightbox-download" href="#" download>Download original</a>
+  </div>
+  <div class="lightstrip" id="lightstrip"></div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/cloudinary.js"></script>
+<script src="../js/exif-data.js"></script>
+<script src="../js/lightbox.js"></script>
+<script>
+  // This album is defined in js/config.js — find it by matching the
+  // filename of this page against each album's slug.
+  const slug = "chinatown";
+  const album = CONFIG.albums.find(a => a.slug === slug);
+
+  let photos = [];
+
+  function renderHeader() {
+    document.getElementById('album-eyebrow').textContent = album.subtitle;
+    document.getElementById('album-title').textContent = album.title;
+    document.getElementById('album-desc').textContent = album.description;
+    document.title = `${album.title} — GCHIANSNAP`;
+  }
+
+  function renderGallery() {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
+
+    photos.forEach((p, i) => {
+      const fig = document.createElement('figure');
+      fig.className = 'tile';
+      fig.innerHTML = `<img src="${p.thumb}" alt="${p.title}" loading="lazy">`;
+      fig.addEventListener('click', () => Lightbox.open(photos, i));
+      gallery.appendChild(fig);
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('figure.tile').forEach(f => io.observe(f));
+  }
+
+  // --- load photos by tag ---
+  async function init() {
+    renderHeader();
+    const resources = await Cloudinary.fetchByTag(album.tag);
+
+    if (!resources.length) {
+      document.getElementById('gallery').innerHTML =
+        `<p style="color: var(--text-dim); font-size: 0.9rem;">No photos tagged "${album.tag}" yet — tag some in Cloudinary to populate this album.</p>`;
+      return;
+    }
+
+    photos = resources.map((r) => ({
+      id: r.public_id,
+      title: Cloudinary.captionFor(r, ''),
+      thumb: Cloudinary.thumbUrl(r.public_id, 800),
+      stage: Cloudinary.stageUrl(r.public_id, 1600),
+      download: Cloudinary.downloadUrl(r.public_id),
+      location: album.title,
+      exif: exifForPublicId(r.public_id)
+    }));
+
+    renderGallery();
+  }
+
+  init();
+</script>
+
+</body>
+</html>
