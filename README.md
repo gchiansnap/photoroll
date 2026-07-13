@@ -6,16 +6,22 @@ A personal photo journal, hosted on GitHub Pages, with images served through Clo
 
 ```
 photoroll/
-├── index.html          Homepage — hero, featured shots, gear blurb, album links
+├── index.html          Homepage — hero, featured shots, album links
+├── about.html           Bio and full gear breakdown
+├── private.html          Password-gated gallery template — one file, reused for every private gallery via URL params
 ├── albums/
 │   └── joochiat.html    An album page (one per "roll")
 ├── css/
 │   └── main.css         Shared styles for the whole site
 ├── js/
-│   ├── config.js        Cloud name, tag names, album list — edit this to configure the site
+│   ├── config.js        Cloud name, tag names, album list, about/gear content
 │   ├── cloudinary.js     Shared helpers for building URLs and fetching photos by tag
-│   └── home.js           Homepage-specific logic
-└── assets/               Any static files not served from Cloudinary (currently unused)
+│   ├── lightbox.js       Shared lightbox (click/swipe navigation), used everywhere
+│   ├── exif-data.js      Static EXIF lookup, since Cloudinary's plan doesn't expose it
+│   ├── home.js           Homepage-specific logic
+│   ├── about.js          About page logic
+│   └── private-gallery.js  Password prompt + gallery rendering for private.html
+└── assets/               Favicons and any static files not served from Cloudinary
 ```
 
 ## How photos get on the site

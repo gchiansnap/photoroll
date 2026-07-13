@@ -34,6 +34,9 @@
 </div>
 
 <main>
+  <p style="margin: 0 0 2vw; display:none;" id="page-slideshow-wrap">
+    <button class="slideshow-trigger" id="page-slideshow-trigger">Slideshow &rarr;</button>
+  </p>
   <div class="gallery" id="gallery" style="display:none;"></div>
 </main>
 
@@ -43,6 +46,7 @@
 
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <button class="lightbox-slideshow-trigger" id="lightbox-slideshow-trigger">Slideshow</button>
   <span class="lightbox-nav prev" id="lightbox-prev" aria-label="Previous">&lsaquo;</span>
   <span class="lightbox-nav next" id="lightbox-next" aria-label="Next">&rsaquo;</span>
   <div class="lightbox-stage">
@@ -63,6 +67,36 @@
 <script src="js/exif-data.js"></script>
 <script src="js/lightbox.js"></script>
 <script src="js/private-gallery.js"></script>
+
+
+<div class="slideshow" id="slideshow">
+  <img id="slideshow-img" src="" alt="">
+  <div class="slideshow-overlay">
+    <p class="slideshow-caption" id="slideshow-caption"></p>
+    <p class="slideshow-exif" id="slideshow-exif"></p>
+  </div>
+  <div class="slideshow-controls">
+    <button id="slideshow-playpause" aria-label="Play or pause"><span class="icon">&#10073;&#10073;</span></button>
+    <button id="slideshow-settings-btn" aria-label="Settings"><span class="icon">&#9881;</span></button>
+    <button id="slideshow-close" aria-label="Close">&times;</button>
+  </div>
+  <div class="slideshow-settings" id="slideshow-settings">
+    <fieldset>
+      <legend>Speed</legend>
+      <label><input type="radio" name="slideshow-speed" value="8"> Slow (8s)</label>
+      <label><input type="radio" name="slideshow-speed" value="4" checked> Medium (4s)</label>
+      <label><input type="radio" name="slideshow-speed" value="2"> Fast (2s)</label>
+    </fieldset>
+    <fieldset>
+      <legend>Display</legend>
+      <label><input type="radio" name="slideshow-display" value="captions"> Captions</label>
+      <label><input type="radio" name="slideshow-display" value="exif"> EXIF data</label>
+      <label><input type="radio" name="slideshow-display" value="all" checked> All</label>
+      <label><input type="radio" name="slideshow-display" value="none"> None</label>
+    </fieldset>
+  </div>
+</div>
+<script src="js/slideshow.js"></script>
 
 </body>
 </html>
