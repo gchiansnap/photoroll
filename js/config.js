@@ -59,14 +59,14 @@ const CONFIG = {
       title: "Muhammad Sultan",
       subtitle: "Oct 2025",
       tag: "muhammadsultan",
-      description: "An evening walk along Muhammad Sultan."
+      description: "An morning walk along Muhammad Sultan."
     },
     {
       slug: "joochiat",
       title: "Joo Chiat",
       subtitle: "Jan 2026",
       tag: "joochiat",
-      description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
+      description: "A walk through Joo Chiat alleys and murals."
     },
     {
       slug: "chinatown",
