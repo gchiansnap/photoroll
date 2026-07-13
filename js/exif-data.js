@@ -1036,10 +1036,22 @@ const EXIF_DATA = {
   "20260117-20260117_EM50660": { camera: "Olympus E-M5 Mark II", lens: "M.Zuiko Digital ED 25mm F1.8", focalLength: "25mm", aperture: "f/4", shutterSpeed: "1/4000s", iso: "200" },
   "20260117-20260117_EM50712": { camera: "Olympus E-M5 Mark II", lens: "M.Zuiko Digital ED 60mm F2.8 Macro", focalLength: "60mm", aperture: "f/8", shutterSpeed: "1/320s", iso: "200" },
   "20260117-20260117_EM50717": { camera: "Olympus E-M5 Mark II", lens: "M.Zuiko Digital ED 60mm F2.8 Macro", focalLength: "60mm", aperture: "f/3.2", shutterSpeed: "1/400s", iso: "200" },
+  "RNI-Films-IMG-09AC2E3C-5C71-47AD-80E1-E26A361E6F5C": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 60mm F2.8 Macro", focalLength: "60mm", aperture: "f/5.6", shutterSpeed: "1/400s", iso: "200" },
+  "RNI-Films-IMG-1389E259-0766-4E98-B9C0-70907E0BD851": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "54mm", aperture: "f/4", shutterSpeed: "1/200s", iso: "200" },
+  "RNI-Films-IMG-1524B5F9-46C6-4677-9396-DFA870D4CB05": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "66mm", aperture: "f/4", shutterSpeed: "1/400s", iso: "200" },
+  "RNI-Films-IMG-4796BA15-52BD-4397-A526-9A52E2DD68E6": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "86mm", aperture: "f/4", shutterSpeed: "1/1000s", iso: "200" },
+  "RNI-Films-IMG-56E7B607-4708-467F-A2D1-74D8C0E14A90": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 60mm F2.8 Macro", focalLength: "60mm", aperture: "f/2.8", shutterSpeed: "1/1250s", iso: "200" },
   "RNI-Films-IMG-6F30B394-C121-4D04-B36B-CFAFEB9CED7B": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 60mm F2.8 Macro", focalLength: "60mm", aperture: "f/5.6", shutterSpeed: "1/400s", iso: "200" },
+  "RNI-Films-IMG-7361AA53-CC99-40C0-81DC-1B0CD534DDEE": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 60mm F2.8 Macro", focalLength: "60mm", aperture: "f/5.6", shutterSpeed: "1/320s", iso: "200" },
+  "RNI-Films-IMG-76272446-70D2-4D27-90C4-2752CE6F8983": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "75mm", aperture: "f/4", shutterSpeed: "1/800s", iso: "200" },
+  "RNI-Films-IMG-7F1D5A5A-C1BF-433E-81F9-FF601FFE5E2F": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "100mm", aperture: "f/4", shutterSpeed: "1/500s", iso: "200" },
+  "RNI-Films-IMG-94FF221D-808E-4B9F-80DC-E0F4A5F745F6": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "100mm", aperture: "f/4", shutterSpeed: "1/500s", iso: "200" },
+  "RNI-Films-IMG-9CDD79C6-1462-4FA5-BB8D-E0B348E256D0": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "12mm", aperture: "f/4", shutterSpeed: "1/1250s", iso: "200" },
+  "RNI-Films-IMG-B14CEA35-5DAD-456C-A728-F97A9DB4721C": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "44mm", aperture: "f/4", shutterSpeed: "1/100s", iso: "250" },
   "RNI-Films-IMG-C5F4729D-E953-4783-A8C3-C45711C79DD6": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "100mm", aperture: "f/8", shutterSpeed: "1/500s", iso: "200" },
   "RNI-Films-IMG-C677524F-9814-4BDC-AECF-674198651AF5": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "25mm", aperture: "f/4", shutterSpeed: "1/2500s", iso: "200" },
   "RNI-Films-IMG-F80FD7DD-D90A-46F3-A7B7-A5BB4BDDDF98": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "66mm", aperture: "f/4", shutterSpeed: "1/400s", iso: "200" },
+  "RNI-Films-IMG-F880507D-6F6F-4872-86A0-7F79B77A9084": { camera: "Olympus E-M1 Mark II", lens: "M.Zuiko Digital ED 12-100mm F4.0", focalLength: "86mm", aperture: "f/4", shutterSpeed: "1/500s", iso: "200" },
 };
 
 // Looks up EXIF data for a Cloudinary public ID by finding which

@@ -53,6 +53,27 @@ const CONFIG = {
       subtitle: "An ongoing collection",
       tag: "street",
       description: "Unscripted moments from streets and sidewalks."
+    },
+    {
+      slug: "chinatown",
+      title: "Chinatown",
+      subtitle: "Jan 2026",
+      tag: "chinatown",
+      description: "A wander through Chinatown's lanes and shopfronts."
+    },
+    {
+      slug: "hortpark",
+      title: "Hort Park",
+      subtitle: "Jul 2020",
+      tag: "hortpark",
+      description: "An afternoon among the gardens at Hort Park."
+    },
+    {
+      slug: "muhammadsultan",
+      title: "Muhammad Sultan",
+      subtitle: "Oct 2025",
+      tag: "muhammadsultan",
+      description: "An evening walk along Muhammad Sultan."
     }
   ],
 
