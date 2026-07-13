@@ -59,7 +59,7 @@ const CONFIG = {
       title: "Muhammad Sultan",
       subtitle: "Oct 2025",
       tag: "muhammadsultan",
-      description: "An morning walk along Muhammad Sultan."
+      description: "A morning walk along Muhammad Sultan."
     },
     {
       slug: "joochiat",
