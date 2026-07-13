@@ -23,8 +23,17 @@ const Lightbox = {
     this.stripEl = document.getElementById('lightstrip');
     this.prevEl = document.getElementById('lightbox-prev');
     this.nextEl = document.getElementById('lightbox-next');
+    this.slideshowTriggerEl = document.getElementById('lightbox-slideshow-trigger');
 
     this.closeEl.addEventListener('click', () => this.close());
+    if (this.slideshowTriggerEl) {
+      this.slideshowTriggerEl.addEventListener('click', () => {
+        if (typeof Slideshow !== 'undefined') {
+          Slideshow.open(this.photos, this.currentIndex);
+          this.close();
+        }
+      });
+    }
     this.el.addEventListener('click', (e) => {
       if (e.target === this.el) this.close();
     });

@@ -18,8 +18,10 @@ const input = document.getElementById('password-input');
 const errorEl = document.getElementById('password-error');
 const galleryEl = document.getElementById('gallery');
 
+let photos = [];
+
 function renderGallery(resources) {
-  const photos = resources.map((r) => ({
+  photos = resources.map((r) => ({
     id: r.public_id,
     title: Cloudinary.captionFor(r, ''),
     thumb: Cloudinary.thumbUrl(r.public_id, 800),
@@ -50,6 +52,8 @@ function renderGallery(resources) {
 
   gate.style.display = 'none';
   galleryEl.style.display = '';
+  const slideshowWrap = document.getElementById('page-slideshow-wrap');
+  if (slideshowWrap) slideshowWrap.style.display = photos.length ? 'block' : 'none';
 }
 
 async function tryPassword(password) {
@@ -99,3 +103,10 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   await tryPassword(input.value);
 });
+
+const slideshowTrigger = document.getElementById('page-slideshow-trigger');
+if (slideshowTrigger) {
+  slideshowTrigger.addEventListener('click', () => {
+    if (photos.length) Slideshow.open(photos, 0);
+  });
+}
