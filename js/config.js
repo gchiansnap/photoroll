@@ -27,13 +27,6 @@ const CONFIG = {
   // entry here and a matching page in /albums.
   albums: [
     {
-      slug: "joochiat",
-      title: "Joo Chiat",
-      subtitle: "Jan 2026",
-      tag: "joochiat",
-      description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
-    },
-    {
       slug: "animals",
       title: "Animals",
       subtitle: "An ongoing collection",
@@ -55,13 +48,6 @@ const CONFIG = {
       description: "Unscripted moments from streets and sidewalks."
     },
     {
-      slug: "chinatown",
-      title: "Chinatown",
-      subtitle: "Jan 2026",
-      tag: "chinatown",
-      description: "A wander through Chinatown's lanes and shopfronts."
-    },
-    {
       slug: "hortpark",
       title: "Hort Park",
       subtitle: "Jul 2020",
@@ -74,6 +60,20 @@ const CONFIG = {
       subtitle: "Oct 2025",
       tag: "muhammadsultan",
       description: "An evening walk along Muhammad Sultan."
+    },
+    {
+      slug: "joochiat",
+      title: "Joo Chiat",
+      subtitle: "Jan 2026",
+      tag: "joochiat",
+      description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
+    },
+    {
+      slug: "chinatown",
+      title: "Chinatown",
+      subtitle: "Jan 2026",
+      tag: "chinatown",
+      description: "A wander through Chinatown's lanes and shopfronts."
     }
   ],
 
