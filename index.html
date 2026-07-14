@@ -35,9 +35,28 @@
   <div class="feature-grid" id="feature-grid"></div>
 </section>
 
-<section class="albums">
-  <h2>Collections</h2>
-  <div class="album-list" id="album-list"></div>
+<section class="collections-section">
+  <button class="section-toggle" id="collections-toggle" aria-expanded="false">
+    <h2>Collections</h2>
+    <span class="toggle-arrow">&rsaquo;</span>
+  </button>
+  <div class="collapsible" id="collections-collapsible">
+    <div class="collapsible-inner">
+      <div class="album-list" id="album-list"></div>
+    </div>
+  </div>
+</section>
+
+<section class="collections-section">
+  <button class="section-toggle" id="private-toggle" aria-expanded="false">
+    <h2>Private Galleries</h2>
+    <span class="toggle-arrow">&rsaquo;</span>
+  </button>
+  <div class="collapsible" id="private-collapsible">
+    <div class="collapsible-inner">
+      <div class="album-list" id="private-gallery-list"></div>
+    </div>
+  </div>
 </section>
 
 <footer>
