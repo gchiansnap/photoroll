@@ -77,6 +77,17 @@ const CONFIG = {
     }
   ],
 
+  // Private galleries listed on the homepage under "Private Galleries".
+  // Listing them here makes their titles and tags visible in this public
+  // file — the photos themselves stay protected by the password check on
+  // the Worker, but the gallery's existence is no longer hidden from
+  // anyone reading the site's source. Each links to private.html, which
+  // still prompts for its password before showing anything.
+  privateGalleries: [
+    { title: "WUAFC", tag: "wuafc" },
+    { title: "Japan 2025", tag: "japan-2025" }
+  ],
+
   // Content for the About page. Edit freely — this is the one place
   // to update your bio and gear list.
   about: {

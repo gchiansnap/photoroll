@@ -79,6 +79,45 @@ function initAlbumLinks() {
   });
 }
 
+function initPrivateGalleryLinks() {
+  const list = document.getElementById('private-gallery-list');
+  if (!list) return;
+  list.innerHTML = '';
+  CONFIG.privateGalleries.forEach((gallery) => {
+    const a = document.createElement('a');
+    a.className = 'album-link';
+    a.href = `private.html?tag=${encodeURIComponent(gallery.tag)}&title=${encodeURIComponent(gallery.title)}`;
+    a.innerHTML = `
+      <span>
+        <span class="album-link-title">${gallery.title}</span><br>
+        <span class="album-link-sub">Password protected</span>
+      </span>
+      <span class="album-link-arrow">&rarr;</span>
+    `;
+    list.appendChild(a);
+  });
+}
+
+function initSectionToggles() {
+  const toggles = [
+    { btnId: 'collections-toggle', panelId: 'collections-collapsible' },
+    { btnId: 'private-toggle', panelId: 'private-collapsible' }
+  ];
+
+  toggles.forEach(({ btnId, panelId }) => {
+    const btn = document.getElementById(btnId);
+    const panel = document.getElementById(panelId);
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', () => {
+      const isOpen = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(isOpen));
+    });
+  });
+}
+
 initHero();
 initFeatured();
 initAlbumLinks();
+initPrivateGalleryLinks();
+initSectionToggles();
