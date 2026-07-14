@@ -7,6 +7,7 @@ const Slideshow = {
   index: 0,
   playing: false,
   timer: null,
+  idleTimer: null,
   speedSeconds: 4,
   display: 'all', // 'captions' | 'exif' | 'all' | 'none'
 
@@ -30,6 +31,15 @@ const Slideshow = {
 
     this.el.addEventListener('click', (e) => {
       if (e.target === this.el) this.close();
+    });
+
+    // Auto-hide the controls and cursor after 4s of no activity — mouse
+    // movement, taps, clicks, or key presses all count as activity and
+    // bring them back immediately. Stays visible while the settings
+    // panel is open, since the person is actively using it.
+    const activityEvents = ['mousemove', 'touchstart', 'click', 'keydown'];
+    activityEvents.forEach((evt) => {
+      this.el.addEventListener(evt, () => this.registerActivity());
     });
 
     this.speedRadios.forEach((r) => {
@@ -73,6 +83,7 @@ const Slideshow = {
     this.render();
     this.startTimer();
     this.updatePlayPauseIcon();
+    this.registerActivity();
 
     if (this.el.requestFullscreen) {
       this.el.requestFullscreen().catch(() => {
@@ -85,10 +96,23 @@ const Slideshow = {
   close() {
     this.el.classList.remove('open');
     clearInterval(this.timer);
+    clearTimeout(this.idleTimer);
+    this.el.classList.remove('idle');
     this.settingsPanel.classList.remove('open');
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
     }
+  },
+
+  registerActivity() {
+    this.el.classList.remove('idle');
+    clearTimeout(this.idleTimer);
+    // Don't hide controls while the settings panel is open — the person
+    // is actively using it even if their mouse happens to sit still.
+    if (this.settingsPanel.classList.contains('open')) return;
+    this.idleTimer = setTimeout(() => {
+      this.el.classList.add('idle');
+    }, 4000);
   },
 
   startTimer() {
@@ -111,6 +135,7 @@ const Slideshow = {
 
   toggleSettings() {
     this.settingsPanel.classList.toggle('open');
+    this.registerActivity();
   },
 
   next(manual) {

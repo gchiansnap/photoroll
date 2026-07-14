@@ -15,8 +15,21 @@ document.title = `${title} — GCHIANSNAP`;
 const gate = document.getElementById('password-gate');
 const form = document.getElementById('password-form');
 const input = document.getElementById('password-input');
+const rememberCheckbox = document.getElementById('remember-me');
 const errorEl = document.getElementById('password-error');
 const galleryEl = document.getElementById('gallery');
+
+// Enter key already submits the form natively in most browsers (a form
+// with a single text input submits on Enter by default) — this handler
+// is a safeguard for the few mobile keyboards that don't fire that
+// reliably. requestSubmit() triggers the same 'submit' listener below,
+// so preventDefault here avoids any chance of a duplicate submission.
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    form.requestSubmit();
+  }
+});
 
 let photos = [];
 
@@ -85,7 +98,13 @@ async function tryPassword(password) {
   }
 
   const data = await res.json();
-  sessionStorage.setItem(`gallery-pw:${tag}`, password);
+  if (rememberCheckbox.checked) {
+    localStorage.setItem(`gallery-pw:${tag}`, password);
+    sessionStorage.removeItem(`gallery-pw:${tag}`);
+  } else {
+    sessionStorage.setItem(`gallery-pw:${tag}`, password);
+    localStorage.removeItem(`gallery-pw:${tag}`);
+  }
   renderGallery(Cloudinary.sortResources(data.resources || []));
   return true;
 }
@@ -93,7 +112,9 @@ async function tryPassword(password) {
 if (!tag) {
   errorEl.textContent = 'No gallery specified in this link.';
 } else {
-  const remembered = sessionStorage.getItem(`gallery-pw:${tag}`);
+  // Check localStorage (remembered across visits) first, then fall
+  // back to sessionStorage (remembered only for this browser tab).
+  const remembered = localStorage.getItem(`gallery-pw:${tag}`) || sessionStorage.getItem(`gallery-pw:${tag}`);
   if (remembered) {
     tryPassword(remembered);
   }
