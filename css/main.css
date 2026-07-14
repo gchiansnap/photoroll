@@ -276,6 +276,59 @@ section h2{
   text-align: right;
 }
 
+/* ---------- collapsible collections/private sections ---------- */
+.collections-section{
+  padding: 3vw 6vw;
+}
+.collections-section + .collections-section{
+  margin-top: 0;
+}
+
+.section-toggle{
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 1.4rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text);
+}
+
+.section-toggle h2{
+  margin: 0;
+}
+
+.section-toggle .toggle-arrow{
+  font-size: 1.4rem;
+  font-weight: 200;
+  color: var(--text-dim);
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
+  margin-top: -0.3rem;
+}
+
+.section-toggle[aria-expanded="true"] .toggle-arrow{
+  transform: rotate(90deg);
+}
+
+.collapsible{
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.collapsible.open{
+  grid-template-rows: 1fr;
+}
+.collapsible-inner{
+  overflow: hidden;
+  min-height: 0;
+}
+
 /* ---------- album links ---------- */
 .album-list{
   display: flex;
