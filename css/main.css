@@ -22,7 +22,7 @@ a { color: inherit; }
 
 /* ---------- shared header ---------- */
 header.page-header{
-  padding: 12vw 6vw 5vw;
+  padding: clamp(2rem, 12vw, 5rem) clamp(1.25rem, 6vw, 3rem) clamp(1.5rem, 5vw, 2.5rem);
   text-align: left;
 }
 
@@ -67,7 +67,7 @@ header.page-header p.sub{
 .back-link:hover{ color: var(--text); border-color: var(--text-dim); }
 
 .about-hero + .page-header{
-  padding-top: 4vw;
+  padding-top: clamp(1rem, 4vw, 2rem);
 }
 
 /* ---------- homepage hero ---------- */
@@ -102,8 +102,8 @@ header.page-header p.sub{
 
 .about-hero{
   position: relative;
-  height: 46vh;
-  min-height: 320px;
+  height: clamp(220px, 40vh, 380px);
+  min-height: 220px;
   overflow: hidden;
   background: #0a0a0a;
 }
@@ -177,7 +177,7 @@ header.page-header p.sub{
 
 /* ---------- section headings ---------- */
 section{
-  padding: 6vw 6vw;
+  padding: clamp(1.25rem, 6vw, 3rem) clamp(1.25rem, 6vw, 3rem);
 }
 
 section h2{
