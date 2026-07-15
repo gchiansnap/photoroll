@@ -99,8 +99,16 @@
   }
 
   // --- load photos by tag ---
+  function showSkeleton() {
+    const heights = [220, 280, 180, 260, 200, 300, 190, 240];
+    document.getElementById('gallery').innerHTML = heights
+      .map((h) => `<div class="skeleton-tile" style="height:${h}px"></div>`)
+      .join('');
+  }
+
   async function init() {
     renderHeader();
+    showSkeleton();
     const resources = await Cloudinary.fetchByTag(album.tag);
 
     if (!resources.length) {
