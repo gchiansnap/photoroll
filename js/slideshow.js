@@ -85,6 +85,12 @@ const Slideshow = {
     this.updatePlayPauseIcon();
     this.registerActivity();
 
+    trackEvent('slideshow_start', {
+      start_photo_id: photos[startIndex] ? photos[startIndex].id : undefined,
+      photo_count: photos.length,
+      gallery: document.title
+    });
+
     if (this.el.requestFullscreen) {
       this.el.requestFullscreen().catch(() => {
         // Fullscreen can be denied (e.g. some mobile browsers) — the
@@ -152,6 +158,14 @@ const Slideshow = {
 
   render() {
     const p = this.photos[this.index];
+
+    trackEvent('photo_view', {
+      photo_id: p.id,
+      photo_title: p.title || undefined,
+      source: 'slideshow',
+      gallery: document.title
+    });
+
     this.imgEl.src = p.stage;
     this.imgEl.alt = p.title || '';
     this.renderOverlay();

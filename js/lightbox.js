@@ -78,6 +78,10 @@ const Lightbox = {
     this.currentIndex = index;
     this.render();
     this.el.classList.add('open');
+    trackEvent('lightbox_open', {
+      photo_id: photos[index] ? photos[index].id : undefined,
+      gallery: document.title
+    });
   },
 
   close() {
@@ -96,6 +100,13 @@ const Lightbox = {
 
   render() {
     const p = this.photos[this.currentIndex];
+
+    trackEvent('photo_view', {
+      photo_id: p.id,
+      photo_title: p.title || undefined,
+      source: 'lightbox',
+      gallery: document.title
+    });
 
     this.imgEl.classList.remove('shown');
     const preload = new Image();
