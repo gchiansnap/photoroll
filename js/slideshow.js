@@ -105,6 +105,7 @@ const Slideshow = {
     this.el.classList.remove('open');
     clearInterval(this.timer);
     clearTimeout(this.idleTimer);
+    clearTimeout(this.fadeTimer);
     this.el.classList.remove('idle');
     this.settingsPanel.classList.remove('open');
     if (document.fullscreenElement) {
@@ -163,8 +164,8 @@ const Slideshow = {
   // range so it's never jarringly abrupt or distractingly slow.
   updateFadeDuration() {
     const ms = Math.round(this.speedSeconds * 1000 * 0.25);
-    const clamped = Math.min(900, Math.max(150, ms));
-    this.imgEl.style.transitionDuration = `${clamped}ms`;
+    this.currentFadeMs = Math.min(900, Math.max(150, ms));
+    this.imgEl.style.transitionDuration = `${this.currentFadeMs}ms`;
   },
 
   render() {
@@ -177,13 +178,25 @@ const Slideshow = {
       gallery: document.title
     });
 
+    const fadeMs = this.currentFadeMs || 400;
+    clearTimeout(this.fadeTimer);
+
     this.imgEl.style.opacity = '0';
     const preload = new Image();
-    preload.onload = () => {
-      this.imgEl.src = p.stage;
-      requestAnimationFrame(() => { this.imgEl.style.opacity = '1'; });
-    };
     preload.src = p.stage;
+
+    // Wait for the fade-out to actually finish playing before swapping
+    // in the new image — without this, a fast-loading or already-cached
+    // image (the common case once photos have been preloaded) can swap
+    // and fade back in almost immediately, collapsing the whole
+    // crossfade into a single paint so it looks like nothing happened.
+    this.fadeTimer = setTimeout(() => {
+      this.imgEl.src = p.stage;
+      requestAnimationFrame(() => {
+        this.imgEl.style.opacity = '1';
+      });
+    }, fadeMs);
+
     this.imgEl.alt = p.title || '';
     this.renderOverlay();
     this.preloadNext();
