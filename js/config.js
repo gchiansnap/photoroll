@@ -93,23 +93,18 @@ const CONFIG = {
   about: {
     intro: [
       "I'm Greg, a photographer based in Singapore.",
-      "I didn't pick up a camera to chase perfect sunsets or famous landmarks. What keeps me returning is the chance to preserve the small moments that would otherwise pass unnoticed — a quiet alley, changing weather, familiar streets, or a brief interaction between strangers.",
-      "Whether I'm exploring neighbourhoods close to home or travelling abroad, I hope these photographs encourage others to slow down and see beauty in the everyday.",
-      "I shoot almost exclusively with the Micro Four Thirds system, favouring a lightweight setup that lets me keep a camera close wherever I go."
+      "I didn't pick up a camera to chase perfect sunsets or famous landmarks. What keeps me coming back is the opportunity to preserve the small moments that might otherwise pass unnoticed—a quiet alley, shifting weather, familiar streets, or a fleeting interaction between strangers.",
+      "Whether I'm exploring neighbourhoods close to home or travelling abroad, I hope these photographs encourage others to slow down, look a little closer, and find beauty in the everyday.",
+      "I photograph almost exclusively with the Micro Four Thirds system. Its compact size allows me to carry a camera almost everywhere, because the best photographs often happen when you least expect them."
     ],
-    gearIntro: "No single kit — whatever suits the walk that day. Currently rotating between:",
+    gearHeading: "In My Bag",
     gear: [
-      { type: "Camera", name: "Olympus OM-D E-M1 Mark II" },
-      { type: "Camera", name: "Olympus OM-D E-M5 Mark II" },
-      { type: "Lens", name: "M.Zuiko Digital ED 12-100mm F4 IS PRO" },
-      { type: "Lens", name: "M.Zuiko Digital ED 25mm F1.8" },
-      { type: "Lens", name: "M.Zuiko Digital ED 40-150mm F2.8 PRO" },
-      { type: "Lens", name: "M.Zuiko Digital ED 12mm F2.0" },
-      { type: "Lens", name: "M.Zuiko Digital ED 14-42mm F3.5-5.6 EZ" },
-      { type: "Lens", name: "M.Zuiko Digital 45mm F1.8" },
-      { type: "Lens", name: "M.Zuiko Digital ED 60mm F2.8 Macro" },
-      { type: "Lens", name: "M.Zuiko Digital ED 40-150mm F4.0-5.6 R" },
-      { type: "Phone", name: "iPhone 16 Pro Max" }
+      { type: "Primary Camera", name: "Olympus OM-D E-M1 Mark II" },
+      { type: "Secondary Camera", name: "Olympus OM-D E-M5 Mark II" },
+      { type: "Everyday Lens", name: "M.Zuiko 12–100mm F4 IS PRO" },
+      { type: "Telephoto Lens", name: "M.Zuiko 40–150mm F4 PRO" },
+      { type: "Favourite Prime", name: "M.Zuiko 25mm F1.8" },
+      { type: "Editing", name: "Adobe Lightroom Classic · RNI Films" }
     ]
   }
 };

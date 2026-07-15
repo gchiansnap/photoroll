@@ -27,7 +27,7 @@ function initAbout() {
     introEl.appendChild(p);
   });
 
-  document.getElementById('gear-intro').textContent = CONFIG.about.gearIntro;
+  document.getElementById('gear-heading').textContent = CONFIG.about.gearHeading;
 
   const gearList = document.getElementById('gear-list');
   gearList.innerHTML = '';
