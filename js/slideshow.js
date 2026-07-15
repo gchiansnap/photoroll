@@ -46,6 +46,7 @@ const Slideshow = {
       if (parseInt(r.value, 10) === this.speedSeconds) r.checked = true;
       r.addEventListener('change', (e) => {
         this.speedSeconds = parseInt(e.target.value, 10);
+        this.updateFadeDuration();
         if (this.playing) this.startTimer();
       });
     });
@@ -80,6 +81,7 @@ const Slideshow = {
     this.playing = true;
     this.el.classList.add('open');
     this.settingsPanel.classList.remove('open');
+    this.updateFadeDuration();
     this.render();
     this.startTimer();
     this.updatePlayPauseIcon();
@@ -156,6 +158,15 @@ const Slideshow = {
     if (manual && this.playing) this.startTimer();
   },
 
+  // Fade duration scales with slideshow speed — faster speed, faster
+  // fade — as a fixed fraction of the interval, clamped to a sensible
+  // range so it's never jarringly abrupt or distractingly slow.
+  updateFadeDuration() {
+    const ms = Math.round(this.speedSeconds * 1000 * 0.25);
+    const clamped = Math.min(900, Math.max(150, ms));
+    this.imgEl.style.transitionDuration = `${clamped}ms`;
+  },
+
   render() {
     const p = this.photos[this.index];
 
@@ -166,7 +177,13 @@ const Slideshow = {
       gallery: document.title
     });
 
-    this.imgEl.src = p.stage;
+    this.imgEl.style.opacity = '0';
+    const preload = new Image();
+    preload.onload = () => {
+      this.imgEl.src = p.stage;
+      requestAnimationFrame(() => { this.imgEl.style.opacity = '1'; });
+    };
+    preload.src = p.stage;
     this.imgEl.alt = p.title || '';
     this.renderOverlay();
     this.preloadNext();

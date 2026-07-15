@@ -33,6 +33,19 @@ input.addEventListener('keydown', (e) => {
 
 let photos = [];
 
+function showSkeleton() {
+  const heights = [220, 280, 180, 260, 200, 300, 190, 240];
+  galleryEl.innerHTML = heights
+    .map((h) => `<div class="skeleton-tile" style="height:${h}px"></div>`)
+    .join('');
+  galleryEl.style.display = '';
+}
+
+function hideSkeleton() {
+  galleryEl.innerHTML = '';
+  galleryEl.style.display = 'none';
+}
+
 function renderGallery(resources) {
   photos = resources.map((r) => ({
     id: r.public_id,
@@ -71,6 +84,7 @@ function renderGallery(resources) {
 
 async function tryPassword(password) {
   errorEl.textContent = '';
+  showSkeleton();
 
   let res;
   try {
@@ -80,19 +94,23 @@ async function tryPassword(password) {
       body: JSON.stringify({ tag, password })
     });
   } catch {
+    hideSkeleton();
     errorEl.textContent = 'Could not reach the server — check your connection.';
     return false;
   }
 
   if (res.status === 401) {
+    hideSkeleton();
     errorEl.textContent = 'Incorrect password — try again.';
     return false;
   }
   if (res.status === 404) {
+    hideSkeleton();
     errorEl.textContent = 'This gallery link looks broken — check the URL.';
     return false;
   }
   if (!res.ok) {
+    hideSkeleton();
     errorEl.textContent = 'Something went wrong — try again in a moment.';
     return false;
   }
