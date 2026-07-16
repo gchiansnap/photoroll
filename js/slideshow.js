@@ -87,6 +87,15 @@ const Slideshow = {
     this.updatePlayPauseIcon();
     this.registerActivity();
 
+    // Lock the underlying page from scrolling while the slideshow is
+    // open — needed especially on iOS Safari, where a fixed-position
+    // overlay alone can still let the page behind it scroll and peek
+    // through around the edges. Remembers the exact scroll position
+    // so closing the slideshow returns you to where you were.
+    this.scrollY = window.scrollY;
+    document.body.classList.add('slideshow-lock');
+    document.body.style.top = `-${this.scrollY}px`;
+
     trackEvent('slideshow_start', {
       start_photo_id: photos[startIndex] ? photos[startIndex].id : undefined,
       photo_count: photos.length,
@@ -108,6 +117,11 @@ const Slideshow = {
     clearTimeout(this.fadeTimer);
     this.el.classList.remove('idle');
     this.settingsPanel.classList.remove('open');
+
+    document.body.classList.remove('slideshow-lock');
+    document.body.style.top = '';
+    window.scrollTo(0, this.scrollY || 0);
+
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
     }
