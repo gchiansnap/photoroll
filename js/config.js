@@ -30,6 +30,7 @@ const CONFIG = {
       slug: "animals",
       title: "Animals",
       subtitle: "An ongoing collection",
+      homeSubtitle: "Creatures encountered along the way — wild, stray, and everything in between.",
       tag: "animals",
       description: "Creatures encountered along the way — wild, stray, and everything in between."
     },
@@ -37,6 +38,7 @@ const CONFIG = {
       slug: "architecture",
       title: "Architecture",
       subtitle: "An ongoing collection",
+      homeSubtitle: "Facades, structures, and the shapes cities take.",
       tag: "architecture",
       description: "Facades, structures, and the shapes cities take."
     },
@@ -44,6 +46,7 @@ const CONFIG = {
       slug: "street",
       title: "Street",
       subtitle: "An ongoing collection",
+      homeSubtitle: "Unscripted moments from streets and sidewalks.",
       tag: "street",
       description: "Unscripted moments from streets and sidewalks."
     },
@@ -51,6 +54,7 @@ const CONFIG = {
       slug: "hortpark",
       title: "Hort Park",
       subtitle: "Jul 2020",
+      homeSubtitle: "July 2020",
       tag: "hortpark",
       description: "An afternoon among the gardens at Hort Park."
     },
@@ -58,6 +62,7 @@ const CONFIG = {
       slug: "muhammadsultan",
       title: "Muhammad Sultan",
       subtitle: "Oct 2025",
+      homeSubtitle: "October 2025",
       tag: "muhammadsultan",
       description: "An evening walk along Muhammad Sultan."
     },
@@ -65,6 +70,7 @@ const CONFIG = {
       slug: "joochiat",
       title: "Joo Chiat",
       subtitle: "Jan 2026",
+      homeSubtitle: "January 2026",
       tag: "joochiat",
       description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
     },
@@ -72,6 +78,7 @@ const CONFIG = {
       slug: "chinatown",
       title: "Chinatown",
       subtitle: "Jan 2026",
+      homeSubtitle: "January 2026",
       tag: "chinatown",
       description: "A wander through Chinatown's lanes and shopfronts."
     }

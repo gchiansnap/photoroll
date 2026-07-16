@@ -61,21 +61,36 @@ async function initFeatured() {
   document.querySelectorAll('.feature-tile').forEach(f => io.observe(f));
 }
 
-function initAlbumLinks() {
+async function initAlbumLinks() {
   const list = document.getElementById('album-list');
   list.innerHTML = '';
-  CONFIG.albums.forEach((album) => {
+
+  // Render all album links immediately with a placeholder count, then
+  // fill in the real count as each album's tag lookup resolves — avoids
+  // the whole list waiting on the slowest album before showing anything.
+  const rows = CONFIG.albums.map((album) => {
     const a = document.createElement('a');
     a.className = 'album-link';
     a.href = `albums/${album.slug}.html`;
     a.innerHTML = `
       <span>
         <span class="album-link-title">${album.title}</span><br>
-        <span class="album-link-sub">${album.subtitle}</span>
+        <span class="album-link-count" id="count-${album.slug}">&nbsp;</span><br>
+        <span class="album-link-sub">${album.homeSubtitle || album.subtitle}</span>
       </span>
       <span class="album-link-arrow">&rarr;</span>
     `;
     list.appendChild(a);
+    return album;
+  });
+
+  rows.forEach(async (album) => {
+    const resources = await Cloudinary.fetchByTag(album.tag);
+    const countEl = document.getElementById(`count-${album.slug}`);
+    if (countEl) {
+      const n = resources.length;
+      countEl.textContent = `${n} photograph${n === 1 ? '' : 's'}`;
+    }
   });
 }
 
@@ -90,7 +105,7 @@ function initPrivateGalleryLinks() {
     a.innerHTML = `
       <span>
         <span class="album-link-title">${gallery.title}</span><br>
-        <span class="album-link-sub">Password protected</span>
+        <span class="album-link-sub">Available by invitation</span>
       </span>
       <span class="album-link-arrow">&rarr;</span>
     `;
