@@ -81,6 +81,25 @@ const Slideshow = {
     this.playing = true;
     this.el.classList.add('open');
     this.settingsPanel.classList.remove('open');
+
+    // Force the overlay's critical positioning inline, at maximum CSS
+    // specificity — a belt-and-braces guarantee that it truly covers
+    // the viewport no matter what, independent of any stylesheet
+    // cascade quirk on a particular device/browser.
+    Object.assign(this.el.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      right: '0',
+      bottom: '0',
+      width: '100vw',
+      height: '100dvh',
+      maxHeight: '100dvh',
+      zIndex: '2147483647',
+      display: 'flex',
+      overflow: 'hidden'
+    });
+
     this.updateFadeDuration();
     this.render();
     this.startTimer();
@@ -112,6 +131,7 @@ const Slideshow = {
 
   close() {
     this.el.classList.remove('open');
+    this.el.style.display = 'none';
     clearInterval(this.timer);
     clearTimeout(this.idleTimer);
     clearTimeout(this.fadeTimer);
