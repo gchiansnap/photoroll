@@ -510,11 +510,11 @@ figure.tile:hover img{ transform: scale(1.015); filter: brightness(1.04); }
 }
 .slideshow.open{ display: flex; }
 
+html.slideshow-lock,
 body.slideshow-lock{
-  position: fixed;
-  left: 0;
-  right: 0;
   overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
 }
 
 .slideshow img{
