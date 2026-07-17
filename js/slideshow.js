@@ -106,28 +106,11 @@ const Slideshow = {
     this.updatePlayPauseIcon();
     this.registerActivity();
 
-    // Lock the underlying page from scrolling while the slideshow is
-    // open. Deliberately avoids the classic "position:fixed + negative
-    // top offset" scroll-lock trick — that technique forces an
-    // immediate page reflow the instant it's applied, which causes a
-    // visible one-frame jump/flash on iOS Safari right as the
-    // slideshow opens. Plain overflow:hidden has no such reflow cost.
-    this.scrollY = window.scrollY;
-    document.documentElement.classList.add('slideshow-lock');
-    document.body.classList.add('slideshow-lock');
-
     trackEvent('slideshow_start', {
       start_photo_id: photos[startIndex] ? photos[startIndex].id : undefined,
       photo_count: photos.length,
       gallery: document.title
     });
-
-    if (this.el.requestFullscreen) {
-      this.el.requestFullscreen().catch(() => {
-        // Fullscreen can be denied (e.g. some mobile browsers) — the
-        // overlay itself already covers the full viewport regardless.
-      });
-    }
   },
 
   close() {
@@ -138,10 +121,6 @@ const Slideshow = {
     clearTimeout(this.fadeTimer);
     this.el.classList.remove('idle');
     this.settingsPanel.classList.remove('open');
-
-    document.documentElement.classList.remove('slideshow-lock');
-    document.body.classList.remove('slideshow-lock');
-    window.scrollTo(0, this.scrollY || 0);
 
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
