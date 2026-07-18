@@ -779,3 +779,6 @@ footer{
   outline: 1px solid var(--text-dim);
   outline-offset: 3px;
 }
+
+#slideshow-img{will-change:opacity,transform;transform:translateZ(0);backface-visibility:hidden;contain:paint;}
+#slideshow{isolation:isolate;}
