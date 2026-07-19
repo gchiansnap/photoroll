@@ -19,9 +19,13 @@ function renderGalleries(galleries) {
     const a = document.createElement('a');
     a.className = 'album-link';
     a.href = `private-gallery.html?slug=${encodeURIComponent(gallery.slug)}`;
+    const countLabel = typeof gallery.count === 'number'
+      ? `${gallery.count} photograph${gallery.count === 1 ? '' : 's'}`
+      : '';
     a.innerHTML = `
       <span>
-        <span class="album-link-title">${gallery.title}</span>
+        <span class="album-link-title">${gallery.title}</span><br>
+        <span class="album-link-count">${countLabel}</span>
       </span>
       <span class="album-link-arrow">&rarr;</span>
     `;
