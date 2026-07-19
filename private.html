@@ -17,7 +17,10 @@
 </head>
 <body>
 
-<a class="back-link" href="index.html">&larr; GCHIANSNAP</a>
+<div style="display:flex; justify-content:space-between; align-items:center; margin: 0 6vw;">
+  <a class="back-link" style="margin:0;" href="index.html">&larr; GCHIANSNAP</a>
+  <button id="logout-btn" type="button" style="background:none; border:none; color:var(--text-dim); font-size:0.8rem; letter-spacing:0.04em; cursor:pointer; padding:0; font-family:inherit;">Log out</button>
+</div>
 
 <header class="page-header">
   <p class="eyebrow">Private</p>
@@ -35,6 +38,7 @@
 </footer>
 
 <script src="js/config.js"></script>
+<script src="js/private-logout.js"></script>
 <script src="js/private-list.js"></script>
 
 <!-- Cloudflare Web Analytics -->
