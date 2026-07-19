@@ -1,8 +1,9 @@
 // Individual private gallery page (private-gallery.html). Reads
 // ?slug=<gallery-slug> and asks the Worker for that gallery's photos,
-// sending the session cookie along. The Worker enforces access — this
-// page never sees a password and never decides access on its own; if the
-// Worker says no (401/404), we just redirect to the login page.
+// sending the session token (via PrivateAuth's Authorization header, plus
+// the cookie as a fallback for regular browsers). The Worker enforces
+// access — this page never sees a password and never decides access on
+// its own; if the Worker says no (401/404), we just redirect to login.
 //
 // One file serves every private gallery; nothing here is specific to a
 // particular gallery. See the GALLERY_REGISTRY in cloudflare-worker.js to
@@ -90,7 +91,8 @@ async function load() {
   let res;
   try {
     res = await fetch(`${CONFIG.apiBaseUrl}/gallery?slug=${encodeURIComponent(slug)}`, {
-      credentials: 'include'
+      credentials: 'include',
+      headers: { ...PrivateAuth.authHeader() }
     });
   } catch {
     hideSkeleton();

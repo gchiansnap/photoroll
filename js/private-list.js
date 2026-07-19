@@ -1,7 +1,9 @@
-// Private galleries hub (private.html). Requires a valid session cookie —
-// if there isn't one, bounce to the login page. Once authenticated, lists
-// only the galleries the visitor's group is allowed to see (public +
-// listed private ones); hidden private galleries never appear here.
+// Private galleries hub (private.html). Requires a valid session — a
+// token in localStorage (works everywhere, including in-app browsers)
+// and/or the pr_session cookie (regular browsers) — or it bounces to the
+// login page. Once authenticated, lists only the galleries the visitor's
+// group is allowed to see (public + listed private ones); hidden private
+// galleries never appear here.
 
 const listEl = document.getElementById('private-gallery-list');
 
@@ -36,7 +38,10 @@ function renderGalleries(galleries) {
 async function init() {
   let sessionRes;
   try {
-    sessionRes = await fetch(`${CONFIG.apiBaseUrl}/auth/session`, { credentials: 'include' });
+    sessionRes = await fetch(`${CONFIG.apiBaseUrl}/auth/session`, {
+      credentials: 'include',
+      headers: { ...PrivateAuth.authHeader() }
+    });
   } catch {
     listEl.innerHTML = '<p class="password-prompt">Could not reach the server — check your connection.</p>';
     return;
@@ -50,7 +55,10 @@ async function init() {
 
   let galleriesRes;
   try {
-    galleriesRes = await fetch(`${CONFIG.apiBaseUrl}/galleries`, { credentials: 'include' });
+    galleriesRes = await fetch(`${CONFIG.apiBaseUrl}/galleries`, {
+      credentials: 'include',
+      headers: { ...PrivateAuth.authHeader() }
+    });
   } catch {
     listEl.innerHTML = '<p class="password-prompt">Could not reach the server — check your connection.</p>';
     return;

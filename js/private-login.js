@@ -1,5 +1,7 @@
 // Handles the single-password login form on private-login.html.
-// On success, the Worker sets a signed session cookie and this page
+// On success, the Worker returns a signed session token (also set as a
+// cookie, but the cookie alone isn't reliable inside in-app browsers —
+// see private-auth.js for why). This stores the token via PrivateAuth and
 // redirects to wherever the visitor was headed (?next=...), defaulting
 // to the private gallery list.
 
@@ -11,11 +13,14 @@ const input = document.getElementById('password-input');
 const errorEl = document.getElementById('login-error');
 const submitBtn = form.querySelector('button[type="submit"]');
 
-// If already authenticated (valid cookie from a previous visit), skip
+// If already authenticated (valid token from a previous visit), skip
 // straight through instead of showing the form.
 (async () => {
   try {
-    const res = await fetch(`${CONFIG.apiBaseUrl}/auth/session`, { credentials: 'include' });
+    const res = await fetch(`${CONFIG.apiBaseUrl}/auth/session`, {
+      credentials: 'include',
+      headers: { ...PrivateAuth.authHeader() }
+    });
     const data = await res.json();
     if (data.authenticated) {
       window.location.href = next;
@@ -63,6 +68,11 @@ form.addEventListener('submit', async (e) => {
     errorEl.textContent = 'Something went wrong — try again in a moment.';
     submitBtn.disabled = false;
     return;
+  }
+
+  const data = await res.json();
+  if (data.token) {
+    PrivateAuth.setToken(data.token);
   }
 
   window.location.href = next;
