@@ -367,9 +367,16 @@ section h2{
 }
 
 .album-link-arrow{
+  display: inline-block;
   font-weight: 200;
   font-size: 1.2rem;
   color: var(--text-dim);
+  transition: transform 0.2s ease;
+}
+.album-link:hover .album-link-arrow{ transform: translateX(6px); }
+
+@media (max-width: 640px){
+  .album-link{ padding: 1.4rem 0; } /* ~12.5% shorter rows than the 1.6rem desktop default */
 }
 
 /* ---------- private gallery password gate ---------- */
