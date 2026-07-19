@@ -25,7 +25,7 @@ const SESSION_MAX_AGE_SECONDS = 30 * 24 * 60 * 60; // 30 days
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
   "Access-Control-Allow-Credentials": "true",
 };
 
@@ -107,6 +107,32 @@ export default {
 
 function cloudinaryAuth(env) {
   return btoa(`${env.CLOUDINARY_API_KEY}:${env.CLOUDINARY_API_SECRET}`);
+}
+
+// Cheaper than fetchResourcesByTag when only a number is needed (e.g. for
+// the gallery list) — one search call, max_results:1, reading total_count
+// from the response instead of paginating and fetching full resource
+// details for every photo.
+async function countResourcesByTag(tag, env) {
+  const auth = cloudinaryAuth(env);
+  const cloudName = env.CLOUDINARY_CLOUD_NAME;
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudName}/resources/search`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ expression: `tags="${tag}"`, max_results: 1 }),
+    }
+  );
+  if (!res.ok) {
+    throw new Error(`Cloudinary count failed: ${await res.text()}`);
+  }
+  const data = await res.json();
+  return data.total_count || 0;
 }
 
 async function fetchResourcesByTag(tag, env) {
@@ -260,8 +286,21 @@ function getCookie(request, name) {
   return match ? match[1] : null;
 }
 
+function getBearerToken(request) {
+  const header = request.headers.get("Authorization") || "";
+  const match = header.match(/^Bearer\s+(.+)$/i);
+  return match ? match[1] : null;
+}
+
+// Checks for a session token two ways: an Authorization: Bearer header
+// first, then the pr_session cookie as a fallback. The header path exists
+// because in-app browsers (Instagram, Facebook, TikTok, etc.) run on
+// locked-down WebViews that block or silently drop third-party/cross-site
+// cookies — even ones explicitly marked SameSite=None; Secure, which a
+// regular browser accepts fine. A token sent as a normal request header
+// isn't a cookie at all, so those WebViews have nothing to block.
 async function getSession(request, env) {
-  const token = getCookie(request, SESSION_COOKIE_NAME);
+  const token = getBearerToken(request) || getCookie(request, SESSION_COOKIE_NAME);
   return verifySession(token, env);
 }
 
@@ -307,8 +346,11 @@ async function handleTagLookup(tag, env) {
 // checked against every entry in the GROUP_PASSWORDS secret (a JSON object
 // mapping group name -> password, e.g. {"family":"...","friends":"...",
 // "guests":"..."}); whichever group's password matches becomes the signed
-// session's group. On success, sets a signed, HttpOnly session cookie and
-// never echoes back which group matched.
+// session's group. On success, sets a signed, HttpOnly session cookie (for
+// regular browsers) AND returns the same signed token in the response body
+// (for clients storing it in localStorage — see getSession's comment on
+// why: in-app browsers block the cookie). Never echoes back which group
+// matched.
 async function handleLogin(request, env) {
   let body;
   try {
@@ -342,7 +384,7 @@ async function handleLogin(request, env) {
 
   const token = await signSession(matchedGroup, env);
   return json(
-    { ok: true },
+    { ok: true, token },
     200,
     "no-store",
     { "Set-Cookie": buildSetCookie(token, SESSION_MAX_AGE_SECONDS) }
@@ -371,7 +413,8 @@ async function handleSessionCheck(request, env) {
 // allowedGroups includes the visitor's authenticated group. Hidden private
 // galleries are never included here regardless of auth — they only exist
 // via direct link. No password/group/access info is ever revealed for
-// galleries that are filtered out.
+// galleries that are filtered out. Each entry includes a photo count,
+// fetched concurrently across all visible galleries.
 async function handleGalleryList(request, env) {
   const session = await getSession(request, env);
 
@@ -384,12 +427,22 @@ async function handleGalleryList(request, env) {
     return false;
   });
 
-  return json(
-    { galleries: visible.map((g) => ({ title: g.title, slug: g.slug })) },
-    200,
-    "no-store"
+  const galleries = await Promise.all(
+    visible.map(async (g) => {
+      let count = null;
+      try {
+        count = await countResourcesByTag(g.tag, env);
+      } catch {
+        // Don't let one gallery's count lookup fail the whole list —
+        // it'll just render without a count client-side.
+      }
+      return { title: g.title, slug: g.slug, count };
+    })
   );
+
+  return json({ galleries }, 200, "no-store");
 }
+
 
 // GET /gallery?slug=X — returns photos for one gallery. Public galleries
 // are always served. Private galleries require a valid session whose group

@@ -43,12 +43,25 @@ Save each as a secret (not a plaintext variable) and redeploy when prompted.
 
 Open `cloudflare-worker.js` and edit the `GALLERY_REGISTRY` array near the top — see `gallery-schema.example.json` for the field reference (`title`, `slug`, `tag`, `visibility`, `listed`, `allowedGroups`). Redeploy the Worker after any change; there's no separate database to update.
 
+## Why there's both a cookie and a localStorage token
+
+Login now returns the signed session token two ways: as the `pr_session` cookie (as originally designed) *and* in the JSON response body, which `js/private-auth.js` stores in `localStorage` and sends as an `Authorization: Bearer <token>` header on every private-gallery request.
+
+This exists because in-app browsers (Instagram, Facebook, TikTok, etc.) run on locked-down WebViews that block or silently drop third-party/cross-site cookies — including ones marked `SameSite=None; Secure`, which a regular mobile browser accepts fine. A token sent as a normal header isn't a cookie, so those WebViews have nothing to block. `getSession()` in the Worker checks the `Authorization` header first, falling back to the cookie.
+
+**Trade-off:** a token in `localStorage` can be read by any script running on the page — an `HttpOnly` cookie can't be read by JS at all. That only matters if something else on the page were ever compromised (e.g. a malicious third-party script); worth knowing, not a reason to avoid it here.
+
+**Logout** now clears the `localStorage` token client-side (that's what actually matters, since the token itself is stateless and not revoked server-side) in addition to calling `/auth/logout` to clear the cookie.
+
+No new secrets or deploy steps beyond what's already above — redeploy the Worker for the `getSession`/`handleLogin` changes, and push the four updated `js/private-*.js` files plus the new `js/private-auth.js`.
+
 ## What this buys you vs. the old system
 
 - One password per person, not one per gallery — a family member with the family password sees every gallery `allowedGroups` grants "family," automatically.
-- 30-day signed cookie instead of the browser remembering a plaintext password in `localStorage`.
+- 30-day signed session instead of the browser remembering a plaintext password.
 - Hidden galleries are now actually hidden from the listing endpoint, not just unlinked from the homepage.
 - `/gallery?slug=X` returns an identical 404 whether the slug doesn't exist or the visitor's group just isn't allowed — no way to probe which galleries exist or who has access to what.
+- Works consistently inside in-app browsers, not just regular mobile/desktop browsers.
 
 ## Realistic limits (same as before)
 
