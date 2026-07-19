@@ -337,7 +337,7 @@ section h2{
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  padding: 1.6rem 0;
+  padding: 1.6rem 8px 1.6rem 0;
   border-top: 1px solid var(--hairline);
   text-decoration: none;
   color: var(--text);
@@ -376,7 +376,7 @@ section h2{
 .album-link:hover .album-link-arrow{ transform: translateX(6px); }
 
 @media (max-width: 640px){
-  .album-link{ padding: 1.4rem 0; } /* ~12.5% shorter rows than the 1.6rem desktop default */
+  .album-link{ padding: 1.4rem 8px 1.4rem 0; } /* ~12.5% shorter rows than the 1.6rem desktop default */
 }
 
 /* ---------- private gallery password gate ---------- */
@@ -652,19 +652,23 @@ figure.tile:hover img{ transform: scale(1.015); filter: brightness(1.04); }
   position: absolute;
   top: 2rem;
   left: 2.5vw;
-  background: none;
+  z-index: 5;
+  background: rgba(0,0,0,0.55);
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: none;
   color: var(--text);
   font-size: 0.78rem;
   font-weight: 400;
   letter-spacing: 0.04em;
-  opacity: 0.65;
+  opacity: 0.85;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.5rem 0.9rem;
   font-family: inherit;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, background 0.2s ease;
 }
-.lightbox-slideshow-trigger:hover{ opacity: 1; }
+.lightbox-slideshow-trigger:hover{ opacity: 1; background: rgba(0,0,0,0.7); }
 
 /* ---------- lightbox ---------- */
 .lightbox{
