@@ -99,13 +99,18 @@ async function initAlbumLinks() {
 // know about) is now decided entirely by the Worker's signed session,
 // so a single link into the private-galleries hub is all this page
 // needs. The hub (private.html) handles login-checking and listing.
+//
+// This used to sit inside a collapsible section whose header also read
+// "Private Galleries" — same text twice in a row. Now it's a plain,
+// always-visible link (no accordion), with a padlock to signal it's the
+// private entry point instead of relying on the repeated label.
 function initPrivateGalleryLinks() {
   const list = document.getElementById('private-gallery-list');
   if (!list) return;
   list.innerHTML = `
     <a class="album-link" href="private.html">
       <span>
-        <span class="album-link-title">Private Galleries</span><br>
+        <span class="album-link-title">&#128274; Private Galleries</span><br>
         <span class="album-link-sub">Available by invitation</span>
       </span>
       <span class="album-link-arrow">&rarr;</span>
@@ -115,8 +120,7 @@ function initPrivateGalleryLinks() {
 
 function initSectionToggles() {
   const toggles = [
-    { btnId: 'collections-toggle', panelId: 'collections-collapsible' },
-    { btnId: 'private-toggle', panelId: 'private-collapsible' }
+    { btnId: 'collections-toggle', panelId: 'collections-collapsible' }
   ];
 
   toggles.forEach(({ btnId, panelId }) => {
