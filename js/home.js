@@ -94,23 +94,23 @@ async function initAlbumLinks() {
   });
 }
 
+// Private galleries are no longer enumerated client-side — which
+// galleries exist (and which of them a given visitor is even allowed to
+// know about) is now decided entirely by the Worker's signed session,
+// so a single link into the private-galleries hub is all this page
+// needs. The hub (private.html) handles login-checking and listing.
 function initPrivateGalleryLinks() {
   const list = document.getElementById('private-gallery-list');
   if (!list) return;
-  list.innerHTML = '';
-  CONFIG.privateGalleries.forEach((gallery) => {
-    const a = document.createElement('a');
-    a.className = 'album-link';
-    a.href = `private.html?tag=${encodeURIComponent(gallery.tag)}&title=${encodeURIComponent(gallery.title)}`;
-    a.innerHTML = `
+  list.innerHTML = `
+    <a class="album-link" href="private.html">
       <span>
-        <span class="album-link-title">${gallery.title}</span><br>
+        <span class="album-link-title">Private Galleries</span><br>
         <span class="album-link-sub">Available by invitation</span>
       </span>
       <span class="album-link-arrow">&rarr;</span>
-    `;
-    list.appendChild(a);
-  });
+    </a>
+  `;
 }
 
 function initSectionToggles() {

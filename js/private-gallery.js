@@ -1,37 +1,26 @@
-// Private gallery page. Reads ?tag=<cloudinary-tag>&title=<display-title>
-// from the URL, prompts for a password, and — if the Worker accepts it —
-// renders the matching photos the same way a public album does.
+// Individual private gallery page (private-gallery.html). Reads
+// ?slug=<gallery-slug> and asks the Worker for that gallery's photos,
+// sending the session cookie along. The Worker enforces access — this
+// page never sees a password and never decides access on its own; if the
+// Worker says no (401/404), we just redirect to the login page.
 //
-// One file serves every private gallery; nothing here is specific to
-// a particular gallery. See DEPLOYMENT.md for how to create a new one.
+// One file serves every private gallery; nothing here is specific to a
+// particular gallery. See the GALLERY_REGISTRY in cloudflare-worker.js to
+// add or retire one.
 
 const params = new URLSearchParams(window.location.search);
-const tag = params.get('tag');
-const title = params.get('title') || 'Gallery';
+const slug = params.get('slug');
 
-document.getElementById('gallery-title').textContent = title;
-document.title = `${title} — GCHIANSNAP`;
-
-const gate = document.getElementById('password-gate');
-const form = document.getElementById('password-form');
-const input = document.getElementById('password-input');
-const rememberCheckbox = document.getElementById('remember-me');
-const errorEl = document.getElementById('password-error');
+const titleEl = document.getElementById('gallery-title');
+const statusEl = document.getElementById('gallery-status');
 const galleryEl = document.getElementById('gallery');
 
-// Enter key already submits the form natively in most browsers (a form
-// with a single text input submits on Enter by default) — this handler
-// is a safeguard for the few mobile keyboards that don't fire that
-// reliably. requestSubmit() triggers the same 'submit' listener below,
-// so preventDefault here avoids any chance of a duplicate submission.
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    form.requestSubmit();
-  }
-});
-
 let photos = [];
+
+function showStatus(message) {
+  statusEl.textContent = message;
+  statusEl.style.display = '';
+}
 
 function showSkeleton() {
   const heights = [220, 280, 180, 260, 200, 300, 190, 240];
@@ -46,7 +35,10 @@ function hideSkeleton() {
   galleryEl.style.display = 'none';
 }
 
-function renderGallery(resources) {
+function renderGallery(title, resources) {
+  titleEl.textContent = title;
+  document.title = `${title} — GCHIANSNAP`;
+
   photos = resources.map((r) => ({
     id: r.public_id,
     title: Cloudinary.captionFor(r, ''),
@@ -76,72 +68,55 @@ function renderGallery(resources) {
   }, { threshold: 0.08 });
   document.querySelectorAll('figure.tile').forEach((f) => io.observe(f));
 
-  gate.style.display = 'none';
+  statusEl.style.display = 'none';
   galleryEl.style.display = '';
   const slideshowWrap = document.getElementById('page-slideshow-wrap');
   if (slideshowWrap) slideshowWrap.style.display = photos.length ? 'block' : 'none';
 }
 
-async function tryPassword(password) {
-  errorEl.textContent = '';
+function redirectToLogin() {
+  const next = `private-gallery.html?slug=${encodeURIComponent(slug || '')}`;
+  window.location.href = `private-login.html?next=${encodeURIComponent(next)}`;
+}
+
+async function load() {
+  if (!slug) {
+    showStatus('No gallery specified in this link.');
+    return;
+  }
+
   showSkeleton();
 
   let res;
   try {
-    res = await fetch(`${CONFIG.apiBaseUrl}/private`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tag, password })
+    res = await fetch(`${CONFIG.apiBaseUrl}/gallery?slug=${encodeURIComponent(slug)}`, {
+      credentials: 'include'
     });
   } catch {
     hideSkeleton();
-    errorEl.textContent = 'Could not reach the server — check your connection.';
-    return false;
+    showStatus('Could not reach the server — check your connection.');
+    return;
   }
 
-  if (res.status === 401) {
-    hideSkeleton();
-    errorEl.textContent = 'Incorrect password — try again.';
-    return false;
+  // 401 (no/expired session) and 404 (wrong group, or gallery doesn't
+  // exist) both send the visitor to login — the Worker deliberately
+  // doesn't distinguish between these to a caller who isn't authorized.
+  if (res.status === 401 || res.status === 404) {
+    redirectToLogin();
+    return;
   }
-  if (res.status === 404) {
-    hideSkeleton();
-    errorEl.textContent = 'This gallery link looks broken — check the URL.';
-    return false;
-  }
+
   if (!res.ok) {
     hideSkeleton();
-    errorEl.textContent = 'Something went wrong — try again in a moment.';
-    return false;
+    showStatus('Something went wrong — try again in a moment.');
+    return;
   }
 
   const data = await res.json();
-  if (rememberCheckbox.checked) {
-    localStorage.setItem(`gallery-pw:${tag}`, password);
-    sessionStorage.removeItem(`gallery-pw:${tag}`);
-  } else {
-    sessionStorage.setItem(`gallery-pw:${tag}`, password);
-    localStorage.removeItem(`gallery-pw:${tag}`);
-  }
-  renderGallery(Cloudinary.sortResources(data.resources || []));
-  return true;
+  renderGallery(data.title || 'Gallery', Cloudinary.sortResources(data.resources || []));
 }
 
-if (!tag) {
-  errorEl.textContent = 'No gallery specified in this link.';
-} else {
-  // Check localStorage (remembered across visits) first, then fall
-  // back to sessionStorage (remembered only for this browser tab).
-  const remembered = localStorage.getItem(`gallery-pw:${tag}`) || sessionStorage.getItem(`gallery-pw:${tag}`);
-  if (remembered) {
-    tryPassword(remembered);
-  }
-}
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  await tryPassword(input.value);
-});
+load();
 
 const slideshowTrigger = document.getElementById('page-slideshow-trigger');
 if (slideshowTrigger) {
