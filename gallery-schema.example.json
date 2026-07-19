@@ -1,0 +1,48 @@
+// This is the schema each entry in GALLERY_REGISTRY (in cloudflare-worker.js)
+// follows. It's shown here as its own reference file — the Worker itself
+// reads the registry as a plain JS array, not a separate JSON file, since
+// there's no database or KV to load it from.
+
+// Public gallery — no auth required, always returned by GET /galleries.
+{
+  "title": "Street",
+  "slug": "street",
+  "tag": "street",
+  "visibility": "public"
+}
+
+// Private, listed gallery — appears in GET /galleries (and therefore the
+// "Private Galleries" page) for anyone whose session group is in
+// allowedGroups. Invisible to everyone else, including unauthenticated
+// visitors and members of other groups.
+{
+  "title": "Japan 2025",
+  "slug": "japan-2025",
+  "tag": "japan-2025",
+  "visibility": "private",
+  "listed": true,
+  "allowedGroups": ["family", "friends"]
+}
+
+// Private, hidden gallery — never appears in GET /galleries for anyone,
+// even members of an allowed group. Only reachable via its direct link
+// (private-gallery.html?slug=wuafc), and still fully gated: GET
+// /gallery?slug=wuafc returns 404 for anyone not in allowedGroups.
+{
+  "title": "WUAFC",
+  "slug": "wuafc",
+  "tag": "wuafc",
+  "visibility": "private",
+  "listed": false,
+  "allowedGroups": ["friends"]
+}
+
+// Field reference:
+// title          display name shown to the visitor
+// slug           used in the gallery URL — keep it URL-safe, unique
+// tag            the Cloudinary tag whose photos populate this gallery
+// visibility     "public" | "private"
+// listed         private only. true = shows up in the private gallery
+//                list for allowed groups. false = hidden, direct-link only.
+// allowedGroups  private only. array of group names — must match keys in
+//                the GROUP_PASSWORDS Cloudflare secret.

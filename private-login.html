@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Private Galleries — GCHIANSNAP</title>
+<title>Private Login — GCHIANSNAP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -22,11 +22,17 @@
 <header class="page-header">
   <p class="eyebrow">Private</p>
   <h1>Private Galleries</h1>
-  <p class="sub">Welcome back.</p>
 </header>
 
 <main>
-  <div class="album-list" id="private-gallery-list"></div>
+  <div class="password-gate" id="password-gate">
+    <p class="password-prompt">Enter your password to continue.</p>
+    <form id="login-form">
+      <input type="password" id="password-input" placeholder="Password" autocomplete="off" autofocus>
+      <button type="submit">Unlock</button>
+    </form>
+    <p class="password-error" id="login-error"></p>
+  </div>
 </main>
 
 <footer>
@@ -35,7 +41,7 @@
 </footer>
 
 <script src="js/config.js"></script>
-<script src="js/private-list.js"></script>
+<script src="js/private-login.js"></script>
 
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b25533b211924069b13e7a0559375ac4"}'></script>
