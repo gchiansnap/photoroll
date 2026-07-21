@@ -27,3 +27,10 @@ const EXIF_DATA = {
   "202108011N1A1978": { camera: "Canon EOS R5", lens: "EF24-70mm f/2.8L II USM", focalLength: "35mm", aperture: "f/2.8", shutterSpeed: "1/250s", iso: "640" },
   "202108011N1A2028": { camera: "Canon EOS R5", lens: "EF24-70mm f/2.8L II USM", focalLength: "31mm", aperture: "f/2.8", shutterSpeed: "1/250s", iso: "640" },
 };
+
+// Looks up EXIF data for a Cloudinary public ID by finding which
+// EXIF_DATA key it contains as a substring.
+function exifForPublicId(publicId) {
+  const key = Object.keys(EXIF_DATA).find((k) => publicId.includes(k));
+  return key ? EXIF_DATA[key] : null;
+}
