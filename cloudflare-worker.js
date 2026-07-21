@@ -46,26 +46,61 @@ const CORS_HEADERS = {
 //                  and still fully gated by allowedGroups.
 //   allowedGroups: (private only) which login groups may view it. Group
 //                  names must match keys in the GROUP_PASSWORDS secret.
+// PUBLISHER:GALLERIES:START — auto-generated, do not hand-edit
 const GALLERY_REGISTRY = [
+  ... your existing entries stay exactly as they are ...
   {
     title: "Japan 2025",
     slug: "japan-2025",
     tag: "japan-2025",
     visibility: "private",
     listed: true,
-    allowedGroups: ["family", "friends"],
+    allowedGroups: ["family","VIP"],
+  },
+    {
+    title: "Gregnes Family Photos",
+    slug: "gregnes",
+    tag: "gregnes",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["family","VIP"],
   },
   {
     title: "WUAFC",
     slug: "wuafc",
     tag: "wuafc",
     visibility: "private",
-    listed: false, // hidden — shared only via direct link
-    allowedGroups: ["friends"],
+    listed: true,
+    allowedGroups: ["dinnerclub","VIP"],
+  },
+  {
+    title: "Dinner Club Wedding",
+    slug: "dc-wedding",
+    tag: "dc-wedding",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub","VIP"],
+  },
+  {
+    title: "Dinner Club Penang Trip",
+    slug: "dc-penang",
+    tag: "dc-penang",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub","VIP"],
+  },
+  {
+    title: "Dinner Club Christmas",
+    slug: "dc-xmas",
+    tag: "dc-xmas",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub","VIP"],
   },
   // Example of a public gallery served through this same registry/endpoint:
   // { title: "Street", slug: "street", tag: "street", visibility: "public" },
 ];
+// PUBLISHER:GALLERIES:END
 
 export default {
   async fetch(request, env) {

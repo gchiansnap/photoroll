@@ -25,7 +25,9 @@ const CONFIG = {
   // photo with an album's tag to add it, remove the tag to drop it.
   // To add a new album: tag some photos in Cloudinary, then add one
   // entry here and a matching page in /albums.
+/* PUBLISHER:ALBUMS:START — auto-generated, do not hand-edit */
   albums: [
+    ... your existing entries stay exactly as they are ...
     {
       slug: "animals",
       title: "Animals",
@@ -83,6 +85,7 @@ const CONFIG = {
       description: "A wander through Chinatown's lanes and shopfronts."
     }
   ],
+  /* PUBLISHER:ALBUMS:END */
 
   // Private galleries are no longer defined here. Listing them in this
   // file would make their titles/tags visible to anyone reading the
