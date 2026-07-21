@@ -27,7 +27,6 @@ const CONFIG = {
   // entry here and a matching page in /albums.
 /* PUBLISHER:ALBUMS:START — auto-generated, do not hand-edit */
   albums: [
-    ... your existing entries stay exactly as they are ...
     {
       slug: "animals",
       title: "Animals",
