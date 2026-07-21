@@ -104,6 +104,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["VIP", "family"],
   },
+  {
+    title: "BKK Photoshoot",
+    slug: "gregnes-bkk-photoshoot",
+    tag: "gregnes-bkk-photoshoot",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["VIP", "family"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
