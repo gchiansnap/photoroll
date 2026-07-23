@@ -65,7 +65,7 @@ const CONFIG = {
       subtitle: "Oct 2025",
       homeSubtitle: "October 2025",
       tag: "muhammadsultan",
-      description: "An evening walk along Muhammad Sultan."
+      description: "One morning along Muhammad Sultan and its periphery."
     },
     {
       slug: "joochiat",
@@ -73,7 +73,7 @@ const CONFIG = {
       subtitle: "Jan 2026",
       homeSubtitle: "January 2026",
       tag: "joochiat",
-      description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
+      description: "A walk through Joo Chiat's eceltic mix of traditional and trendy."
     },
     {
       slug: "chinatown",
