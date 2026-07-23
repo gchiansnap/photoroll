@@ -136,6 +136,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["VIP", "family"],
   },
+  {
+    title: "Switzerland 2018",
+    slug: "switzerland-2018",
+    tag: "switzerland-2018",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["VIP", "family"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
