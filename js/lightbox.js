@@ -144,7 +144,14 @@ const Lightbox = {
       const img = document.createElement('img');
       img.src = photo.thumb;
       img.alt = photo.title || '';
-      if (i === this.currentIndex) img.classList.add('active');
+      const distance = Math.abs(i - this.currentIndex);
+      if (i === this.currentIndex) {
+        img.classList.add('active');
+      } else if (distance === 1) {
+        img.classList.add('adjacent');
+      } else {
+        img.classList.add('distant');
+      }
       img.addEventListener('click', (e) => {
         e.stopPropagation();
         this.currentIndex = i;
