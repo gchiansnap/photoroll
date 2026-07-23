@@ -128,6 +128,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["dinnerclub", "VIP"],
   },
+  {
+    title: "Italy 2018",
+    slug: "italy-2018",
+    tag: "italy-2018",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["VIP", "family"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
