@@ -10,6 +10,7 @@ const Slideshow = {
   idleTimer: null,
   speedSeconds: 4,
   display: 'all', // 'captions' | 'exif' | 'all' | 'none'
+  wakeLock: null,
 
   init() {
     this.el = document.getElementById('slideshow');
@@ -67,11 +68,69 @@ const Slideshow = {
       if (e.key === 'ArrowLeft') this.prev(true);
     });
 
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement && this.el.classList.contains('open')) {
-        this.close();
+    // Fullscreenchange fires under different names depending on browser
+    // (only Safari still needs the prefix, but this is cheap insurance).
+    ['fullscreenchange', 'webkitfullscreenchange'].forEach((evt) => {
+      document.addEventListener(evt, () => {
+        if (!this.isFullscreen() && this.el.classList.contains('open')) {
+          this.close();
+        }
+      });
+    });
+
+    // The Wake Lock API auto-releases whenever the tab loses visibility
+    // (switching apps, locking then unlocking, etc). Re-acquire it when
+    // the person comes back, so the screen keeps staying awake for the
+    // rest of the slideshow.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && this.el.classList.contains('open') && !this.wakeLock) {
+        this.requestWakeLock();
       }
     });
+  },
+
+  isFullscreen() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement ||
+      document.mozFullScreenElement || document.msFullscreenElement);
+  },
+
+  requestFullscreenSafe() {
+    const el = this.el;
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen ||
+      el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (!fn) return; // e.g. iOS Safari, which has no Fullscreen API for
+    // arbitrary elements — the fixed-position overlay already fills the
+    // viewport, so the slideshow still looks and behaves right.
+    try {
+      const result = fn.call(el);
+      if (result && result.catch) result.catch(() => {});
+    } catch (err) { /* ignore — not a hard requirement */ }
+  },
+
+  exitFullscreenSafe() {
+    const fn = document.exitFullscreen || document.webkitExitFullscreen ||
+      document.mozCancelFullScreen || document.msExitFullscreen;
+    if (!fn || !this.isFullscreen()) return;
+    try {
+      const result = fn.call(document);
+      if (result && result.catch) result.catch(() => {});
+    } catch (err) { /* ignore */ }
+  },
+
+  async requestWakeLock() {
+    if (!('wakeLock' in navigator)) return; // unsupported browser — no-op
+    try {
+      this.wakeLock = await navigator.wakeLock.request('screen');
+      this.wakeLock.addEventListener('release', () => { this.wakeLock = null; });
+    } catch (err) {
+      this.wakeLock = null; // e.g. low battery or permission denial
+    }
+  },
+
+  releaseWakeLock() {
+    if (!this.wakeLock) return;
+    this.wakeLock.release().catch(() => {});
+    this.wakeLock = null;
   },
 
   open(photos, startIndex = 0) {
@@ -100,6 +159,9 @@ const Slideshow = {
       overflow: 'hidden'
     });
 
+    this.requestFullscreenSafe();
+    this.requestWakeLock();
+
     this.updateFadeDuration();
     this.render();
     this.startTimer();
@@ -122,9 +184,8 @@ const Slideshow = {
     this.el.classList.remove('idle');
     this.settingsPanel.classList.remove('open');
 
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    }
+    this.releaseWakeLock();
+    this.exitFullscreenSafe();
   },
 
   registerActivity() {
