@@ -144,6 +144,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["VIP", "family"],
   },
+  {
+    title: "Bangkok 2026",
+    slug: "bangkok-2026",
+    tag: "bangkok-2026",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["VIP", "family"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
