@@ -120,6 +120,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["VIP", "family"],
   },
+  {
+    title: "Vietnam 2016",
+    slug: "vietnam-2016",
+    tag: "vietnam-2016",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub", "VIP"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
