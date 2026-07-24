@@ -136,6 +136,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["VIP", "family"],
   },
+  {
+    title: "Japan 2025",
+    slug: "japan-2025",
+    tag: "japan-2025",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["VIP", "family"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
