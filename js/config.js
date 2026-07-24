@@ -67,6 +67,14 @@ const CONFIG = {
       tag: "muhammad-sultan",
       description: "One morning along Muhammad Sultan and its periphery."
     },
+    {
+      slug: "chinatown",
+      title: "Chinatown",
+      subtitle: "January 2026",
+      homeSubtitle: "A wander through Chinatown's lanes and shopfronts.",
+      tag: "chinatown",
+      description: "A wander through Chinatown's lanes and shopfronts."
+    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
