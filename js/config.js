@@ -51,6 +51,14 @@ const CONFIG = {
       tag: "street",
       description: "Unscripted moments from streets and sidewalks."
     },
+    {
+      slug: "hort-park",
+      title: "Hort Park",
+      subtitle: "July 2020",
+      homeSubtitle: "An afternoon among the gardens at Hort Park.",
+      tag: "hort-park",
+      description: "An afternoon among the gardens at Hort Park."
+    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
