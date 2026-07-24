@@ -144,14 +144,6 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["dinnerclub", "VIP"],
   },
-  {
-    title: "WUAFC",
-    slug: "wuafc",
-    tag: "wuafc",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["dinnerclub", "VIP"],
-  },
 ];
 // PUBLISHER:GALLERIES:END
 
