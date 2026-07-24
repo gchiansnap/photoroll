@@ -120,6 +120,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["dinnerclub", "VIP"],
   },
+  {
+    title: "Dinner Club Christmas",
+    slug: "dinner-club-christmas",
+    tag: "dinner-club-christmas",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub", "VIP"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
