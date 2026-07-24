@@ -59,6 +59,14 @@ const CONFIG = {
       tag: "hort-park",
       description: "An afternoon among the gardens at Hort Park."
     },
+    {
+      slug: "muhammad-sultan",
+      title: "Muhammad Sultan",
+      subtitle: "October 2025",
+      homeSubtitle: "One morning along Muhammad Sultan and its periphery.",
+      tag: "muhammad-sultan",
+      description: "One morning along Muhammad Sultan and its periphery."
+    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
