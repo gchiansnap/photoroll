@@ -75,6 +75,14 @@ const CONFIG = {
       tag: "chinatown",
       description: "A wander through Chinatown's lanes and shopfronts."
     },
+    {
+      slug: "joo-chiat",
+      title: "Joo Chiat",
+      subtitle: "January 2026",
+      homeSubtitle: "A walk through Joo Chiat's eceltic mix of traditional and trendy.",
+      tag: "joo-chiat",
+      description: "A walk through Joo Chiat's eceltic mix of traditional and trendy."
+    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
