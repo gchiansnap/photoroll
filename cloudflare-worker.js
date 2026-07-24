@@ -104,6 +104,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["dinnerclub", "VIP"],
   },
+  {
+    title: "Penang 2018",
+    slug: "penang-2018",
+    tag: "penang-2018",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub", "VIP"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
