@@ -128,6 +128,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["dinnerclub", "VIP"],
   },
+  {
+    title: "Gregnes Family Photos",
+    slug: "gregnes-family-photos",
+    tag: "gregnes-family-photos",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["VIP", "family"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
