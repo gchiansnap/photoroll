@@ -89,14 +89,6 @@ const GALLERY_REGISTRY = [
     allowedGroups: ["family", "VIP"],
   },
   {
-    title: "Bangkok 2026",
-    slug: "bangkok-2026",
-    tag: "bangkok-2026",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
     title: "Studio Photoshoot",
     slug: "gregnes-studio-photoshoot",
     tag: "gregnes-studio-photoshoot",
