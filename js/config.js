@@ -68,6 +68,14 @@ const CONFIG = {
       description: "One morning along Muhammad Sultan and its periphery."
     },
     {
+      slug: "chinatown",
+      title: "Chinatown",
+      subtitle: "Jan 2026",
+      homeSubtitle: "January 2026",
+      tag: "chinatown",
+      description: "A wander through Chinatown's lanes and shopfronts."
+    },
+    {
       slug: "joochiat",
       title: "Joo Chiat",
       subtitle: "Jan 2026",
@@ -75,14 +83,6 @@ const CONFIG = {
       tag: "joochiat",
       description: "A walk through Joo Chiat's eceltic mix of traditional and trendy."
     },
-    {
-      slug: "chinatown",
-      title: "Chinatown",
-      subtitle: "Jan 2026",
-      homeSubtitle: "January 2026",
-      tag: "chinatown",
-      description: "A wander through Chinatown's lanes and shopfronts."
-    }
   ],
   /* PUBLISHER:ALBUMS:END */
 
