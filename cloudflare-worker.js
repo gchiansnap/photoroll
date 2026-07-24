@@ -72,14 +72,6 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["VIP", "family"],
   },
-  {
-    title: "Studio Photoshoot",
-    slug: "gregnes-studio-photoshoot",
-    tag: "gregnes-studio-photoshoot",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
 ];
 // PUBLISHER:GALLERIES:END
 
