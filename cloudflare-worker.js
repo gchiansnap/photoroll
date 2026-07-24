@@ -97,7 +97,7 @@ const GALLERY_REGISTRY = [
     allowedGroups: ["VIP", "family"],
   },
   {
-    title: "Vietnam '16",
+    title: "Vietnam 2016",
     slug: "vietnam-16",
     tag: "vietnam-16",
     visibility: "private",
