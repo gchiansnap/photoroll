@@ -112,6 +112,14 @@ const GALLERY_REGISTRY = [
     listed: true,
     allowedGroups: ["dinnerclub", "VIP"],
   },
+  {
+    title: "Dinner Club Weddings",
+    slug: "dinner-club-weddings",
+    tag: "dinner-club-weddings",
+    visibility: "private",
+    listed: true,
+    allowedGroups: ["dinnerclub", "VIP"],
+  },
 ];
 // PUBLISHER:GALLERIES:END
 
