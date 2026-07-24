@@ -51,38 +51,6 @@ const CONFIG = {
       tag: "street",
       description: "Unscripted moments from streets and sidewalks."
     },
-    {
-      slug: "hortpark",
-      title: "Hort Park",
-      subtitle: "Jul 2020",
-      homeSubtitle: "July 2020",
-      tag: "hortpark",
-      description: "An afternoon among the gardens at Hort Park."
-    },
-    {
-      slug: "muhammadsultan",
-      title: "Muhammad Sultan",
-      subtitle: "Oct 2025",
-      homeSubtitle: "October 2025",
-      tag: "muhammadsultan",
-      description: "One morning along Muhammad Sultan and its periphery."
-    },
-    {
-      slug: "chinatown",
-      title: "Chinatown",
-      subtitle: "Jan 2026",
-      homeSubtitle: "January 2026",
-      tag: "chinatown",
-      description: "A wander through Chinatown's lanes and shopfronts."
-    },
-    {
-      slug: "joochiat",
-      title: "Joo Chiat",
-      subtitle: "Jan 2026",
-      homeSubtitle: "January 2026",
-      tag: "joochiat",
-      description: "A walk through Joo Chiat's eceltic mix of traditional and trendy."
-    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
