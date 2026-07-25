@@ -25,12 +25,12 @@ const CONFIG = {
   // the Gallery Manager's "Featured Photos" tab, not hand-edited.
   /* PUBLISHER:FEATURED:START — auto-generated, do not hand-edit */
   featuredOrder: [
-    "photoroll/hort-park/20200707_EM50574_kzbxib",
     "photoroll/joo-chiat/20260117091439JooChiat1_rliijr",
     "photoroll/japan-2025/20251213_EM12696_qsdbvl",
-    "photoroll/italy-2018/20180714-P7143910_adwfu8",
+    "photoroll/chinatown/20260101163327Chinatown1_m1f4ba",
+    "photoroll/hort-park/20200707_EM50574_kzbxib",
     "photoroll/muhammad-sultan/20251025113226MuhammadSultan16_dnjkut",
-    "photoroll/chinatown/20260101163327Chinatown1_m1f4ba"
+    "photoroll/italy-2018/20180714-P7143910_adwfu8"
   ],
   /* PUBLISHER:FEATURED:END */
 
