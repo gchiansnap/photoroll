@@ -43,7 +43,7 @@ const CONFIG = {
   // To add a new album: tag some photos in Cloudinary, then add one
   // entry here and a matching page in /albums.
   /* PUBLISHER:ALBUMS:START — auto-generated, do not hand-edit */
-albums: [
+  albums: [
     {
       slug: "animals",
       title: "Animals",
@@ -69,37 +69,37 @@ albums: [
       description: "Unscripted moments from streets and sidewalks."
     },
     {
-      slug: "hortpark",
+      slug: "hort-park",
       title: "Hort Park",
-      subtitle: "Jul 2020",
-      homeSubtitle: "July 2020",
-      tag: "hortpark",
+      subtitle: "July 2020",
+      homeSubtitle: "An afternoon among the gardens at Hort Park.",
+      tag: "hort-park",
       description: "An afternoon among the gardens at Hort Park."
     },
     {
-      slug: "muhammadsultan",
+      slug: "muhammad-sultan",
       title: "Muhammad Sultan",
-      subtitle: "Oct 2025",
-      homeSubtitle: "October 2025",
-      tag: "muhammadsultan",
-      description: "An evening walk along Muhammad Sultan."
-    },
-    {
-      slug: "joochiat",
-      title: "Joo Chiat",
-      subtitle: "Jan 2026",
-      homeSubtitle: "January 2026",
-      tag: "joochiat",
-      description: "A walk through Joo Chiat, shot on the Olympus E-M5 Mark II."
+      subtitle: "October 2025",
+      homeSubtitle: "One morning along Muhammad Sultan and its periphery.",
+      tag: "muhammad-sultan",
+      description: "One morning along Muhammad Sultan and its periphery."
     },
     {
       slug: "chinatown",
       title: "Chinatown",
-      subtitle: "Jan 2026",
-      homeSubtitle: "January 2026",
+      subtitle: "January 2026",
+      homeSubtitle: "A wander through Chinatown's lanes and shopfronts.",
       tag: "chinatown",
       description: "A wander through Chinatown's lanes and shopfronts."
-    }
+    },
+    {
+      slug: "joo-chiat",
+      title: "Joo Chiat",
+      subtitle: "January 2026",
+      homeSubtitle: "A walk through Joo Chiat's eceltic mix of traditional and trendy.",
+      tag: "joo-chiat",
+      description: "A walk through Joo Chiat's eceltic mix of traditional and trendy."
+    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
