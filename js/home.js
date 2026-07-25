@@ -32,7 +32,9 @@ async function initFeatured() {
     return;
   }
 
-  const photos = resources.slice(0, 6).map((r) => ({
+  const ordered = sortByFeaturedOrder(resources, CONFIG.featuredOrder);
+
+  const photos = ordered.slice(0, 6).map((r) => ({
     id: r.public_id,
     title: Cloudinary.captionFor(r, ''),
     thumb: Cloudinary.thumbUrl(r.public_id, 900),

@@ -63,6 +63,49 @@ No new secrets or deploy steps beyond what's already above — redeploy the Work
 - `/gallery?slug=X` returns an identical 404 whether the slug doesn't exist or the visitor's group just isn't allowed — no way to probe which galleries exist or who has access to what.
 - Works consistently inside in-app browsers, not just regular mobile/desktop browsers.
 
-## Realistic limits (same as before)
+## Realistic limits (updated)
 
-No rate-limiting on login attempts — a determined, technical person could still brute-force a weak password. Keep passwords non-trivial. This is "keep it off search engines and out of casual reach," not bank-grade security, same as your existing README already says.
+Login attempts are now rate-limited (see "Login rate limiting" below) —
+10 failed attempts locks that IP out for 24 hours. Combined with a
+non-trivial password, this is enough to stop casual/automated guessing.
+It's still "keep it off search engines and out of casual reach," not
+bank-grade security — a patient, distributed attacker (many IPs) isn't
+fully defeated by a per-IP lockout — same spirit as your existing README
+already says, just meaningfully better than "no rate limiting at all."
+
+## Login rate limiting
+
+`handleLogin` now checks a Workers KV namespace (bound as
+`RATE_LIMIT_KV`) before verifying the password: 10 failed attempts from
+the same IP within a rolling window locks that IP out for 24 hours,
+returning `429` with a `retryAfterSeconds` field and `Retry-After`
+header. A correct password clears the counter immediately. If
+`RATE_LIMIT_KV` isn't bound, login behaves exactly as before — this is
+additive, not a breaking change if you deploy without setting it up.
+
+**Setup** (one-time, do this in the dashboard alongside the secrets
+above): **Workers & Pages → KV → Create a namespace** (any title), then
+**your Worker → Settings → Bindings → Add binding → KV namespace** →
+variable name **`RATE_LIMIT_KV`** → select the namespace you just
+created. Redeploy.
+
+`js/private-login.js` was updated to show a friendly "too many attempts,
+try again in about N hours" message on `429` instead of the generic
+error it previously fell through to.
+
+## Tests
+
+`tests/cloudflare-worker.test.mjs` covers the rate-limiter specifically
+(threshold, lockout duration, per-IP scoping, reset-on-success, and
+graceful no-op if `RATE_LIMIT_KV` isn't bound). No Cloudflare account or
+`wrangler` needed — it imports the Worker directly and drives it with a
+mock KV, using only Node's built-in test runner:
+
+```
+node --test tests/cloudflare-worker.test.mjs
+```
+
+Requires Node 18+ (uses the global `Request`/`Response`/`crypto.subtle`
+that `cloudflare-worker.js` itself relies on — all standard Web APIs also
+present in modern Node, not Cloudflare-specific).
+

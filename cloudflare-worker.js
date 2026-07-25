@@ -22,6 +22,33 @@ const SESSION_COOKIE_SAMESITE = "None";
 const SESSION_COOKIE_NAME = "pr_session";
 const SESSION_MAX_AGE_SECONDS = 30 * 24 * 60 * 60; // 30 days
 
+// --- login rate limiting --------------------------------------------------
+//
+// handleLogin's timingSafeEqual protects against timing attacks, but does
+// nothing to stop someone just trying passwords repeatedly — that's what
+// this section is for. Counters live in the RATE_LIMIT_KV namespace (bound
+// in the dashboard / via worker_deploy.py — see README.md), keyed per
+// client IP, since there's no per-user account to key on.
+//
+// Policy: 10 failed attempts locks that IP out for 24 hours. A correct
+// password clears the counter immediately. The 24h lockout also doubles as
+// the counter's reset window — see recordLoginResult's comment on why a
+// slow trickle of failures effectively behaves like a rolling window
+// rather than a strict "10 in exactly 24h" bucket.
+//
+// Known limitation: KV reads-then-writes here aren't atomic (Workers KV
+// has no compare-and-swap on the free/standard API used here), so a burst
+// of near-simultaneous requests from the same IP could each read the same
+// stale count and all write the same incremented value, undercounting by
+// a few attempts in the worst case. Not a concern for this system's threat
+// model (deterring casual password guessing among people who might know
+// each other, not defending a bank) — see the timingSafeEqual comment
+// below for the same kind of "good enough for this, not a cryptographic
+// guarantee" framing.
+const LOGIN_MAX_ATTEMPTS = 10;
+const LOGIN_LOCKOUT_SECONDS = 24 * 60 * 60; // 24 hours
+const RATE_LIMIT_KEY_PREFIX = "login:";
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -49,101 +76,23 @@ const CORS_HEADERS = {
 // PUBLISHER:GALLERIES:START — auto-generated, do not hand-edit
 const GALLERY_REGISTRY = [
   {
-    title: "Bangkok 2026",
-    slug: "bangkok-2026",
-    tag: "bangkok-2026",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
-    title: "Italy 2018",
-    slug: "italy-2018",
-    tag: "italy-2018",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
-    title: "Switzerland 2018",
-    slug: "switzerland-2018",
-    tag: "switzerland-2018",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
-    title: "BKK Photoshoot",
-    slug: "gregnes-bkk-photoshoot",
-    tag: "gregnes-bkk-photoshoot",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
-    title: "Studio Photoshoot",
-    slug: "gregnes-studio-photoshoot",
-    tag: "gregnes-studio-photoshoot",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
-    title: "Japan 2023",
-    slug: "japan-2023",
-    tag: "japan-2023",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
-    title: "Vietnam 2016",
-    slug: "vietnam-16",
-    tag: "vietnam-16",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["dinnerclub", "VIP"],
-  },
-  {
-    title: "Penang 2018",
-    slug: "penang-2018",
-    tag: "penang-2018",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["dinnerclub", "VIP"],
-  },
-  {
-    title: "Dinner Club Weddings",
-    slug: "dinner-club-weddings",
-    tag: "dinner-club-weddings",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["dinnerclub", "VIP"],
-  },
-  {
-    title: "Dinner Club Christmas",
-    slug: "dinner-club-christmas",
-    tag: "dinner-club-christmas",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["dinnerclub", "VIP"],
-  },
-  {
-    title: "Gregnes Family Photos",
-    slug: "gregnes-family-photos",
-    tag: "gregnes-family-photos",
-    visibility: "private",
-    listed: true,
-    allowedGroups: ["VIP", "family"],
-  },
-  {
     title: "Japan 2025",
     slug: "japan-2025",
     tag: "japan-2025",
     visibility: "private",
     listed: true,
-    allowedGroups: ["VIP", "family"],
+    allowedGroups: ["family", "friends"],
   },
+  {
+    title: "WUAFC",
+    slug: "wuafc",
+    tag: "wuafc",
+    visibility: "private",
+    listed: false, // hidden — shared only via direct link
+    allowedGroups: ["friends"],
+  },
+  // Example of a public gallery served through this same registry/endpoint:
+  // { title: "Street", slug: "street", tag: "street", visibility: "public" },
 ];
 // PUBLISHER:GALLERIES:END
 
@@ -422,6 +371,59 @@ async function handleTagLookup(tag, env) {
   }
 }
 
+// Cloudflare sets this on every request that reaches a Worker — it's the
+// actual visitor IP, not spoofable by the client the way a normal header
+// would be (Cloudflare overwrites it at the edge regardless of what the
+// incoming request claims).
+function clientIp(request) {
+  return request.headers.get("CF-Connecting-IP") || "unknown";
+}
+
+// Reads the current attempt-count/lockout state for an IP. Missing key
+// (never failed, or previous lockout already expired and was cleaned up)
+// reads back as a fresh { count: 0, lockedUntil: null }.
+async function getLoginRateLimit(ip, env) {
+  if (!env.RATE_LIMIT_KV) return { count: 0, lockedUntil: null };
+  const raw = await env.RATE_LIMIT_KV.get(RATE_LIMIT_KEY_PREFIX + ip);
+  if (!raw) return { count: 0, lockedUntil: null };
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return { count: 0, lockedUntil: null };
+  }
+}
+
+// Records a login outcome for the IP. On success, clears the counter
+// outright. On failure, increments it and locks for LOGIN_LOCKOUT_SECONDS
+// once LOGIN_MAX_ATTEMPTS is reached.
+//
+// expirationTtl is refreshed to LOGIN_LOCKOUT_SECONDS on every failed
+// attempt (not just once the lockout triggers), which means: fail once,
+// don't try again for 24h, and the counter quietly expires back to zero —
+// but a slower trickle of failures (each one within 24h of the last) keeps
+// extending that window and can still accumulate to 10. That's a rolling
+// "recent failures" counter, not a strict calendar-day bucket — worth
+// knowing if attempts here don't match "10 failures in exactly 24 wall-
+// clock hours" from a fixed start point.
+async function recordLoginResult(ip, env, success) {
+  if (!env.RATE_LIMIT_KV) return; // no KV bound — rate limiting silently a no-op
+  const key = RATE_LIMIT_KEY_PREFIX + ip;
+
+  if (success) {
+    await env.RATE_LIMIT_KV.delete(key);
+    return;
+  }
+
+  const current = await getLoginRateLimit(ip, env);
+  const count = current.count + 1;
+  const lockedUntil = count >= LOGIN_MAX_ATTEMPTS ? Date.now() + LOGIN_LOCKOUT_SECONDS * 1000 : null;
+  await env.RATE_LIMIT_KV.put(
+    key,
+    JSON.stringify({ count, lockedUntil }),
+    { expirationTtl: LOGIN_LOCKOUT_SECONDS }
+  );
+}
+
 // POST /auth/login { password } — one password field. The password is
 // checked against every entry in the GROUP_PASSWORDS secret (a JSON object
 // mapping group name -> password, e.g. {"family":"...","friends":"...",
@@ -432,6 +434,22 @@ async function handleTagLookup(tag, env) {
 // why: in-app browsers block the cookie). Never echoes back which group
 // matched.
 async function handleLogin(request, env) {
+  const ip = clientIp(request);
+
+  const rateLimit = await getLoginRateLimit(ip, env);
+  if (rateLimit.lockedUntil && Date.now() < rateLimit.lockedUntil) {
+    const retryAfterSeconds = Math.ceil((rateLimit.lockedUntil - Date.now()) / 1000);
+    return json(
+      {
+        error: "Too many incorrect attempts. Try again later.",
+        retryAfterSeconds,
+      },
+      429,
+      "no-store",
+      { "Retry-After": String(retryAfterSeconds) }
+    );
+  }
+
   let body;
   try {
     body = await request.json();
@@ -459,9 +477,11 @@ async function handleLogin(request, env) {
   }
 
   if (!matchedGroup) {
+    await recordLoginResult(ip, env, false);
     return json({ error: "Incorrect password" }, 401);
   }
 
+  await recordLoginResult(ip, env, true);
   const token = await signSession(matchedGroup, env);
   return json(
     { ok: true, token },

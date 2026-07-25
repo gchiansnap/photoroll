@@ -64,6 +64,16 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
+  if (res.status === 429) {
+    const data = await res.json().catch(() => ({}));
+    const hours = Math.ceil((data.retryAfterSeconds || 0) / 3600);
+    errorEl.textContent = hours > 1
+      ? `Too many incorrect attempts — try again in about ${hours} hours.`
+      : 'Too many incorrect attempts — try again later.';
+    submitBtn.disabled = false;
+    return;
+  }
+
   if (!res.ok) {
     errorEl.textContent = 'Something went wrong — try again in a moment.';
     submitBtn.disabled = false;
