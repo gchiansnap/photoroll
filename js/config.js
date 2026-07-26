@@ -92,6 +92,14 @@ const CONFIG = {
       tag: "joo-chiat",
       description: "A walk through Joo Chiat's eceltic mix of traditional and trendy."
     },
+    {
+      slug: "animals",
+      title: "Animals",
+      subtitle: "An ongoing collection",
+      homeSubtitle: "Creatures encountered along the way — wild, stray, and everything in between.",
+      tag: "animals",
+      description: "Creatures encountered along the way — wild, stray, and everything in between."
+    },
   ],
   /* PUBLISHER:ALBUMS:END */
 
