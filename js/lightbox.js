@@ -100,10 +100,14 @@ const Lightbox = {
 
   render() {
     const p = this.photos[this.currentIndex];
+    // See the fallback note further down — same reasoning applies here,
+    // so the analytics event reflects the title actually shown, not just
+    // whatever Cloudinary's live caption fetch happened to return.
+    const currentTitle = p.title || (p.exif && p.exif.title) || '';
 
     trackEvent('photo_view', {
       photo_id: p.id,
-      photo_title: p.title || undefined,
+      photo_title: currentTitle || undefined,
       source: 'lightbox',
       gallery: document.title
     });
@@ -115,10 +119,16 @@ const Lightbox = {
       requestAnimationFrame(() => this.imgEl.classList.add('shown'));
     };
     preload.src = p.stage;
-    this.imgEl.alt = p.title || '';
 
-    const hasTitle = Boolean(p.title && p.title.trim().length > 0);
-    this.titleEl.textContent = hasTitle ? p.title : '';
+    // Most pages set p.title from Cloudinary's live caption (see
+    // Cloudinary.captionFor in home.js/private-gallery.js) — this falls
+    // back to exif-data.js's static copy only if that's empty, so a page
+    // that doesn't fetch captions itself (or a caption that failed to
+    // load) still shows a title if one was ever extracted.
+    this.imgEl.alt = currentTitle;
+
+    const hasTitle = Boolean(currentTitle && currentTitle.trim().length > 0);
+    this.titleEl.textContent = hasTitle ? currentTitle : '';
     this.titleEl.style.display = hasTitle ? 'block' : 'none';
     this.metaEl.textContent = p.location || '';
 
@@ -143,7 +153,7 @@ const Lightbox = {
     this.photos.forEach((photo, i) => {
       const img = document.createElement('img');
       img.src = photo.thumb;
-      img.alt = photo.title || '';
+      img.alt = photo.title || (photo.exif && photo.exif.title) || '';
       const distance = Math.abs(i - this.currentIndex);
       if (i === this.currentIndex) {
         img.classList.add('active');
