@@ -124,7 +124,7 @@ const CONFIG = {
       { type: "Primary Camera", name: "Olympus OM-D E-M1 Mark II" },
       { type: "Secondary Camera", name: "Olympus OM-D E-M5 Mark II" },
       { type: "Everyday Lens", name: "M.Zuiko 12–100mm F4 IS PRO" },
-      { type: "Telephoto Lens", name: "M.Zuiko 40–150mm F4 PRO" },
+      { type: "Telephoto Lens", name: "M.Zuiko 40–150mm F2.8 PRO" },
       { type: "Favourite Prime", name: "M.Zuiko 25mm F1.8" },
       { type: "Editing", name: "Adobe Lightroom Classic · RNI Films" }
     ]
